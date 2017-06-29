@@ -21,16 +21,22 @@ public class Exam
 		try
 		{
 			Connection con = DBConn2.getCon();
-			String sql = "select id,pwd,name from user";
+			String sql = "select id,pwd,name,age from user";
 			if(!name.equals(""))
 			{
-				sql += "where name='" + name + "'";
+				sql += " where name=?";
 			}
+			
 			PreparedStatement prestmt = con.prepareStatement(sql);
+			if(!name.equals(""))
+			{
+				prestmt.setString(1, name);
+			}
 			ResultSet rs = prestmt.executeQuery();
+			
 			while(rs.next())
 			{
-				userlist.add(rs.getString(1) + "," + rs.getString(2) + "," + rs.getString(3));
+				userlist.add(rs.getString(1) + "," + rs.getString(2) + "," + rs.getString(3) + "," + rs.getInt(4));
 			}
 			DBConn2.closeCon();
 			return userlist;
@@ -98,10 +104,10 @@ public class Exam
 
 	public boolean setUserInformation()
 	{
-		HashMap<String, Object> hm = new HashMap<String, Object>();
-		Scanner scanner = new Scanner(System.in);
 		try
 		{
+			HashMap<String, Object> hm = new HashMap<String, Object>();
+			Scanner scanner = new Scanner(System.in);
 			Connection con = DBConn2.getCon();
 			System.out.print("ID : ");
 			hm.put("id", scanner.nextLine());
@@ -111,9 +117,14 @@ public class Exam
 			hm.put("name", scanner.nextLine());
 			System.out.print("AGE : ");
 			hm.put("age", Integer.parseInt(scanner.nextLine()));
-			String sql = "insert into user(id,pwd,name,age) values('" + hm.get("id") + "','" + hm.get("pwd") + "','" +
-										hm.get("name") + "','" + hm.get("age") + "')";
+			
+			String sql = "insert into user(id,pwd,name,age) values(?,?,?,?)";
 			PreparedStatement prestmt = con.prepareStatement(sql);
+			
+			prestmt.setString(1, (String)hm.get("id"));
+			prestmt.setString(2, (String)hm.get("pwd"));
+			prestmt.setString(3, (String)hm.get("name"));
+			prestmt.setInt(4, (Integer)hm.get("age"));
 			prestmt.executeUpdate();
 			DBConn2.closeCon();
 			return true;
@@ -133,10 +144,10 @@ public class Exam
 	{
 		Exam ex = new Exam();
 		ex.setUserInformation();
-		List<String> list = ex.getUserIDList("");
-		for(int i = 0; i < list.size(); i++)
-		{
-			System.out.println(list.get(i));
-		}
+		//List<String> list = ex.getUserIDList("홍길동");
+		//for(int i = 0; i < list.size(); i++)
+		//{
+		//	System.out.println(list.get(i));
+		//}
 	}
 }
