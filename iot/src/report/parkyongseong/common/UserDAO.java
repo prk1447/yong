@@ -56,9 +56,9 @@ public class UserDAO
 			System.out.println("ID : ");
 			hm.put("id", scanner.nextLine());
 			System.out.println("PWD : ");
-			hm.put("id", scanner.nextLine());
-			System.out.println("NAME : ");
 			hm.put("pwd", scanner.nextLine());
+			System.out.println("NAME : ");
+			hm.put("name", scanner.nextLine());
 			System.out.println("AGE : ");
 			hm.put("age", Integer.parseInt(scanner.nextLine()));
 			System.out.println("CLASS_NUM : ");
@@ -67,9 +67,9 @@ public class UserDAO
 			String sql = "insert into user_info(id,pwd,name,age,class_num) values(?,?,?,?,?)";
 			PreparedStatement prestmt = con.prepareStatement(sql);
 			
-			prestmt.setString(1, (String)hm.get("name"));
-			prestmt.setString(2, (String)hm.get("id"));
-			prestmt.setString(3, (String)hm.get("pwd"));
+			prestmt.setString(1, (String)hm.get("id"));
+			prestmt.setString(2, (String)hm.get("pwd"));
+			prestmt.setString(3, (String)hm.get("name"));
 			prestmt.setInt(4, (Integer)hm.get("age"));
 			prestmt.setInt(5, (Integer)hm.get("class_num"));
 			prestmt.executeUpdate();
@@ -86,7 +86,6 @@ public class UserDAO
 		}
 		return false;
 	}
-
 	public static void main(String[] args)
 	{
 		UserDAO ud = new UserDAO();
@@ -102,6 +101,7 @@ public class UserDAO
 			System.out.println(hm);
 		}
 		*/
+		ud.setUserInformation();
 		sql = "select ui.num, ui.id, ui.pwd, ui.name, ui.age, ci.class_name, ci.class_num from user_info as ui, class_info as ci"
 				+ " where ui.class_num=ci.class_num";
 		userlist = ud.doSelect(sql);
