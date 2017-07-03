@@ -1,4 +1,4 @@
-package report.parkyongseong.common;
+package report.parkyongseong.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
+import report.parkyongseong.common.DBConn2;
 
 public class UserDAO 
 {
