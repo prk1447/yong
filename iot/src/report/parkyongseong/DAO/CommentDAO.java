@@ -1,6 +1,7 @@
 package report.parkyongseong.DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import report.parkyongseong.common.DBConn2;
 
@@ -20,6 +22,42 @@ public class CommentDAO
 		con = DBConn2.getCon();
 	}
 	
+	public List<Map> getCommentList(int boardNum) throws SQLException
+	{
+		String sql = "select * from comment_info";
+		sql += " where b_num=?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, boardNum);
+		
+		ResultSet rs = ps.executeQuery();
+		ArrayList commentList = new ArrayList();
+		while(rs.next())
+		{
+			HashMap hm = new HashMap();
+			hm.put("num", rs.getString("num"));
+			hm.put("content", rs.getString("content"));
+			hm.put("reg_date", rs.getString("reg_date"));
+			hm.put("ui_num", rs.getString("ui_num"));
+			commentList.add(hm);
+		}
+		rs.close();
+		rs = null;
+		ps.close();
+		ps = null;
+		return commentList;
+	}
+	
+	public void closeCon()
+	{
+		try
+		{
+			DBConn2.closeCon();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	public boolean insertComment() throws SQLException
 	{
 		String sql = "insert into comment_info(content, ui_num, b_num, reg_date)";
@@ -82,9 +120,9 @@ public class CommentDAO
 			int result = st.executeUpdate(sql);
 			if(result == 1)
 			{
+				con.commit();
 				st.close();
 				st = null;
-				con.commit();
 				return true;
 			}
 		}
@@ -120,14 +158,11 @@ public class CommentDAO
 	public static void main(String[] args) throws ClassNotFoundException, SQLException
 	{
 		CommentDAO cado = new CommentDAO();
-		List<HashMap> userlist = new ArrayList<HashMap>();
 		cado.setConnection();
-		cado.insertComment();
-		cado.updateComment();
-		userlist = cado.selectComment();
-		for(HashMap hm : userlist)
+		List<Map> commentList = cado.getCommentList(1);
+		for(Map m2 : commentList)
 		{
-			System.out.println(hm);
+			System.out.println(m2);
 		}
 	}
 }
