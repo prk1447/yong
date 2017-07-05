@@ -47,6 +47,27 @@ public class CommentDAO
 		return commentList;
 	}
 	
+	public List<Map> getCommentList() throws SQLException
+	{
+		String sql = "select ci.*,b.title,ui.name from comment_info ci, board b, user_info ui";
+		sql += " where ci.b_num=b.num and ci.ui_num=ui.num";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		ArrayList commentList = new ArrayList();
+		while(rs.next())
+		{
+			HashMap hm = new HashMap();
+			hm.put("num", rs.getString("num"));
+			hm.put("content", rs.getString("content"));
+			hm.put("ui_num", rs.getString("num"));
+			hm.put("num", rs.getString("num"));
+			hm.put("num", rs.getString("num"));
+			hm.put("num", rs.getString("num"));
+			hm.put("num", rs.getString("num"));
+		}
+		return commentList;
+	}
+	
 	public void closeCon()
 	{
 		try
