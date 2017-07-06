@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function matrix()
+{
+	var num1 = parseInt(document.getElementById("num1").value);
+	var num2 = parseInt(document.getElementById("num2").value);
+	
+	var str = "<table border='1'>";
+	str += "<tr>";
+	for(var i = 1; i <= num1; i++)
+	{
+		str += "<tr>";
+		for(var j = 1; j <= num2; j++)
+		{
+			str += "<td>" + i + "행" + j + "열" + "</td>";	
+		}
+		str += "</tr>";
+	}
+	str += "</tr>";
+	str += "</table>";
+	document.getElementById("result_div").innerHTML = str;
+}
+</script>
+<body>
+	<table border="1">
+		<tr>
+			<td>행 : <input type="text" name="num1" id="num1"/></td>
+			<td>열 : <input type="text" name="num2" id="num2"/></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><input type="button" value="만들기" onclick="matrix()"/></td>
+		</tr>
+	</table>
+	<div id="result_div"></div>
+</body>
+</html>

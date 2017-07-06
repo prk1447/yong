@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function clickBtn(str)
+{
+	alert(str + "단 입니다.");	
+}
+
+var tableStr ="<table border='1'>";
+tableStr += "<tr>";
+for(var i = 1; i <= 9; i++)
+{
+	tableStr += "<tr>";
+	for(var j = 1; j <= 9; j++)
+	{
+		tableStr += "<td>" + i + "X" + j + "=" + (i*j) + "</td>";
+	}
+	tableStr += "<td><input type='button' name='button' value='버튼' onclick='clickBtn(" + i + ")'/></td>";
+	tableStr += "</tr>";
+}
+tableStr += "</tr>";
+tableStr += "</table>";
+document.write(tableStr);
+</script>
+<body>
+</body>
+</html>
