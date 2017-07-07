@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function checkOnSubmit()
+{
+	var op = document.getElementById("op").value;
+	if(op=="")
+	{
+		alert("서버로 전송에 실패햇습니다 연산자를 제대로 눌러주세요");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+</script>
+<body>
+<form method="get" action="/test.user" onsubmit="return checkOnSubmit()">
+	<select name="op" id="op">
+		<option value="">연산자 선택</option>
+		<option value="+">더하기</option>
+		<option value="-">빼기</option>
+		<option value="*">곱하기</option>
+		<option value="/">나누기</option>
+	</select>
+	<br/>
+	<input type="submit" value="연산자 전송"/>
+</form>
+</body>
+</html>

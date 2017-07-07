@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function makeSureForm()
+{
+	var nameObj = document.getElementById("name");
+	var passObj = document.getElementById("pass");
+	var txtObj = document.getElementById("txt");
+	var dateObj = document.getElementById("i_date");
+	var emObj = document.getElementById("i_email");
+	var radioObj = document.getElementById("i_radio");
+	var colorObj = document.getElementById("i_color");
+	
+	
+	alert("아이디 : " + nameObj.value);
+	alert("비밀번호 : " + passObj.value);
+	alert("텍스트 : " + txtObj.value);
+	alert("날짜 : " + dateObj.value);
+	alert("이메일 : " + emObj.value);
+	alert("성별 : " + radioObj.value);
+	alert("색상 색 : " + colorObj.value);
+	nameObj.style = "color." + colorObj.value;
+}
+</script>
+<body>
+<form id="test_form" method="get" action="/test.user">
+	이름 : <input type="text" id="name" name="name"/><br/>
+	비밀번호 : <input type="password" id="pass" name="pass"/><br/>
+	텍스트 : <input type="text" name="txt" id="txt"/><br/>
+	일자 : <input type="date" name="i_date" id="i_date"/><br/>
+	이메일 : <input type="email" name="i_email" id="i_email"/><br/>
+	성별 : <input type="radio" name="i_radio" id="i_radio" value="남자"/>남자
+	<input type="radio" name="i_radio" id="i_radio" value="여자">여자<br/>
+	색상 : <input type="color" name="i_color" onchange="makeSureForm()" id="i_color"/><br/>
+	<input type="button" value="확인" onclick="makeSureForm()"/>
+	<input type="submit" value="전송"/>
+</form>
+</body>
+</html>

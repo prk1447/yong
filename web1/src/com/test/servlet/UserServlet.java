@@ -20,13 +20,19 @@ public class UserServlet extends HttpServlet{
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resq) throws IOException, ServletException{
 		req.setCharacterEncoding("UTF-8");
-		//html화면에서 던진 값을 각각 String 변수로 받기 시작
+		
+		String op = req.getParameter("op");
+		System.out.println("연산자의 결과는 = " + op);
+		/*
+		String name1 = req.getParameter("name");
+		String pwd1 = req.getParameter("pass");
+		System.out.println("input html에서 던진 값은 : " + name1 + pwd1);
+		*/
 		String command = req.getParameter("command");
-		String id = req.getParameter("id");
-		String pwd = req.getParameter("pwd");
-		String name = req.getParameter("name");
-		String class_num = req.getParameter("class_num");
-		String age = req.getParameter("age");
+		if(command == null)
+		{
+			return;
+		}
 		
 		
 		//UserService에 있는 insertUser(HashMap hm)이라는 함수를
@@ -34,6 +40,14 @@ public class UserServlet extends HttpServlet{
 		if(command.equals("SIGNIN"))
 		{
 			UserService us = new UserService();
+			
+			//html화면에서 던진 값을 각각 String 변수로 받기 시작
+			String id = req.getParameter("id");
+			String pwd = req.getParameter("pwd");
+			String name = req.getParameter("name");
+			String class_num = req.getParameter("class_num");
+			String age = req.getParameter("age");
+			
 			
 			//위에서 받은 String 변수를 출력해줌(Tomcat 콘솔창에)
 			System.out.println(id + "," + pwd + "," + name + "," + class_num + ", " + age);
