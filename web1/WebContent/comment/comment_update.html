@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function checkValue()
+{
+	var ciNumObj = document.getElementById("ci_num");
+	var ciNum = parseInt(ciNumObj.value);
+	if(isNaN(ciNum))
+	{
+		alert("정수를 입력해주세요");
+		return false;
+	}
+	var ciContentObj = document.getElementById("ci_content");
+	if(ciContentObj.value.trim() == "")
+	{
+		alert("content를 입력해주세요 ");
+		return false;
+	}
+	return true;
+}
+</script>
+<body>
+<form action="*.comment" onsubmit="return checkValue()">
+번호 : <input type="text" name="ci_num" id="ci_num"/><br/>
+바꿀내용 : <input type="text" name="ci_content" id="ci_content"/><br/>
+<input type="submit" value="바꾸기"/>
+<input type="hidden" name="command" id="command" value="UPDATE"/>
+</form>
+</body>
+</html>

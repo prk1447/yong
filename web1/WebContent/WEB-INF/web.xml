@@ -22,4 +22,13 @@
     <servlet-name>BoardServlet</servlet-name>
     <url-pattern>*.board</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>CommentServlet</servlet-name>
+    <servlet-class>com.test.servlet.CommentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CommentServlet</servlet-name>
+    <url-pattern>*.comment</url-pattern>
+  </servlet-mapping>
 </web-app>

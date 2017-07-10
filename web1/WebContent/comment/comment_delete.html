@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function checkValue()
+{
+	var ciNumObj = document.getElementById("ci_num");
+	var ciNum = parseInt(ciNumObj.value);
+	if(isNaN(ciNum))
+	{
+		alert("번호를 입력해 주세요");
+		return false;
+	}
+	return true;
+}
+</script>
+<body>
+<form action="*.comment" onsubmit="return checkValue()">
+삭제할 번호 : <input type="text" name="ci_num" id="ci_num"/><br/>
+<input type="submit" value="삭제"/>
+<input type="hidden" name="command" id="command" value="DELETE"/>
+</form>
+</body>
+</html>

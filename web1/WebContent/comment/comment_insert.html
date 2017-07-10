@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function checkValue()
+{
+	var contentObj = document.getElementById("content");
+	if(contentObj.value.trim() == "")
+	{
+		alert("내용을 입력해 주세요");
+		return false;
+	}
+	var uNumObj = document.getElementById("ui_num");
+	var uNum = parseInt(uNumObj.value);
+	if(isNaN(uNum))
+	{
+		alert("1정수를 입력해주세요");
+		return false;
+	}
+	var bNumObj = document.getElementById("b_num");
+	var bNum = parseInt(bNumObj.value);
+	if(isNaN(bNum))
+	{
+		alert("2정수를 입력해 주세요");
+		return false;
+	}
+	return true;
+}
+</script>
+<body>
+<form method="get" action="*.comment" onsubmit="return checkValue()">
+내용 : <textarea name="content" id="content"></textarea><br/>
+UI_NUM : <input type="text" name="ui_num" id="ui_num"/><br/>
+B_NUM : <input type="text" name="b_num" id="b_num"/><br/>
+<input type="submit" value="insert"/>
+<input type="hidden" name="command" id="command" value="INSERT"/>
+</form>
+</body>
+</html>
