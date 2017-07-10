@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function checkValue()
+{
+	var bNumObj = document.getElementById("board_num");
+	var bNum = parseInt(bNumObj.value);
+	if(isNaN(bNum))
+	{
+		alert("정수를 입력해주세요");
+		return false;
+	}
+	var bTitleObj = document.getElementById("title");
+	if(bTitleObj.value.trim() == "")
+	{
+		alert("타이틀 명을 적어주세요");
+		return false;
+	}
+	var bContentObj = document.getElementById("content");
+	if(bContentObj.value.trim() == "")
+	{
+		alert("content를 입력해주세요 ");
+		return false;
+	}
+	return true;
+}
+</script>
+<body>
+<form action="*.board" onsubmit="checkValue()">
+번호 : <input type="text" name="board_num" id="board_num"/><br/>
+title : <input type="text" name="title" id="title"/><br/>
+content : <input type="text" name="content" id="content"/><br/>
+<input type="submit" value="바꾸기"/>
+<input type="hidden" name="command" id="command" value="UPDATE"/>
+</form>
+</body>
+</html>
