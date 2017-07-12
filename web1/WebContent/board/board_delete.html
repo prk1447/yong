@@ -7,7 +7,7 @@
 <script>
 function checkValue()
 {
-	var boardNumObj = document.getElementById("board_num");
+	var boardNumObj = document.getElementById("num");
 	var boardNum = parseInt(boardNumObj.value);
 	if(isNaN(boardNum))
 	{
@@ -19,7 +19,7 @@ function checkValue()
 </script>
 <body>
 <form action="*.board" onsubmit="return checkValue()">
-삭제할 번호 : <input type="text" name="board_num" id="board_num"/><br/>
+삭제할 번호 : <input type="text" name="num" id="num"/><br/>
 <input type="submit" value="삭제"/>
 <input type="hidden" name="command" id="command" value="DELETE"/>
 </form>

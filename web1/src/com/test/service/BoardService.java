@@ -54,7 +54,7 @@ public class BoardService
 			con = DBConn2.getCon();
 			String sql = "delete from board where num=?";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, (String)hm.get("board_num"));
+			ps.setString(1, (String)hm.get("num"));
 			int result = ps.executeUpdate();
 			if(result > 0)
 			{

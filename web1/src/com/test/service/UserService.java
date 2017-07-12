@@ -70,7 +70,7 @@ public class UserService
 			String sql = "delete from user_info where num=?";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, (String)hm.get("num"));
-			int result = ps.executeUpdate(sql);
+			int result = ps.executeUpdate();
 			if(result > 0)
 			{
 				con.commit();

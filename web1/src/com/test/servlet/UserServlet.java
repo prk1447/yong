@@ -21,8 +21,8 @@ public class UserServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resq) throws IOException, ServletException{
 		req.setCharacterEncoding("UTF-8");
 		
-		String op = req.getParameter("op");
-		System.out.println("연산자의 결과는 = " + op);
+		//String op = req.getParameter("op");
+		//System.out.println("연산자의 결과는 = " + op);
 		/*
 		String name1 = req.getParameter("name");
 		String pwd1 = req.getParameter("pass");
@@ -78,10 +78,11 @@ public class UserServlet extends HttpServlet{
 		else if(command.equals("DELETE"))
 		{
 			UserService us = new UserService();
-			String num = req.getParameter("user_num");
+			String num = req.getParameter("num");
 			HashMap hm = new HashMap();
 			hm.put("num", num);
-			if(us.deleteUser(hm))
+			boolean isDelete = us.deleteUser(hm);
+			if(isDelete)
 			{
 				doProcess(resq, "user_info에 있는 " + num + "의값이 지워졌습니다.");
 			}
@@ -123,11 +124,36 @@ public class UserServlet extends HttpServlet{
 				hm.put("name", "%" + userName + "%");
 			}
 			List<Map> userList = us.selectUser(hm);
-			String result = "";
+			String result = "<script>";
+			result += "function deleteUser(Num){";
+			result += "location.href='delete.user?command=DELETE&num=' + Num;";
+			result += "}";
+			result += "</script>";
+			result += "<form action='*.user'>";
+			result += "이름 : <input type='text' name='name' id='name'/> <input type='submit' value='검색'/>";
+			result += "<input type='hidden' name='command' value='SELECT'/>";
+			result += "</form>";
+			result += "<table border='1'>";
+			result += "<tr>";
+			result += "<td>" + "유저번호" + "</td>";
+			result += "<td>" + "유저아이디" + "</td>";
+			result += "<td>" + "유저비밀번호" + "</td>";
+			result += "<td>" + "유저이름" + "</td>";
+			result += "<td>" + "클래스번호" + "</td>";
+			result += "<td>" + "삭제버튼" + "</td>";
+			result += "</tr>";
 			for(Map m : userList)
 			{
-				result += m.toString();
+				result += "<tr>";
+				result += "<td>" + m.get("num") + "</td>";
+				result += "<td>" + m.get("id") + "</td>";
+				result += "<td>" + m.get("pwd") + "</td>";
+				result += "<td>" + m.get("name") + "</td>";
+				result += "<td>" + m.get("class_num") + "</td>";
+				result += "<td><input type='button' value='삭제' onclick='deleteUser(" + m.get("num") + ")'/></td>";
+				result += "</tr>";
 			}
+			result += "</table>";
 			doProcess(resq, result);
 		}
 		

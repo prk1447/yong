@@ -28,13 +28,18 @@ function checkValue()
 	}
 	return true;
 }
+function backBoard()
+{
+	location.href="/board/board_main.html";
+}
 </script>
 <body>
-<form action="*.board" onsubmit="checkValue()">
+<form action="*.board" onsubmit="return checkValue()">
 번호 : <input type="text" name="board_num" id="board_num"/><br/>
 title : <input type="text" name="title" id="title"/><br/>
 content : <input type="text" name="content" id="content"/><br/>
 <input type="submit" value="바꾸기"/>
+<input type="button" value="돌아가기" onclick="backBoard()"/>
 <input type="hidden" name="command" id="command" value="UPDATE"/>
 </form>
 </body>

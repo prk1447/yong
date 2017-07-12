@@ -52,9 +52,9 @@ public class BoardServlet extends HttpServlet{
 		}
 		else if(command.equals("DELETE"))
 		{
-			String boardNum = req.getParameter("board_num");
+			String boardNum = req.getParameter("num");
 			HashMap hm = new HashMap();
-			hm.put("board_num", boardNum);
+			hm.put("num", boardNum);
 			
 			if(bs.boardDelete(hm))
 			{
@@ -74,11 +74,36 @@ public class BoardServlet extends HttpServlet{
 				hm.put("title", "%" + title + "%");
 			}
 			List<Map> boardList = bs.boardSelect(hm);
-			String result = "";
+			String result = "<script>";
+			result += "function deleteBoard(num){";
+			result += "location.href='delete.board?command=DELETE&num=' + num;";
+			result += "}";
+			result += "</script>";
+			result += "<form action='*.board'>";
+			result += "이름 : <input type='text' name='name' id='name'/> <input type='submit' value='검색'/>";
+			result += "<input type='hidden' name='command' value='SELECT'/>";
+			result += "</form>";
+			result += "<table border='1'>";
+			result += "<tr>";
+			result += "<td>" + "보드번호" + "</td>";
+			result += "<td>" + "보드제목" + "</td>";
+			result += "<td>" + "보드내용" + "</td>";
+			result += "<td>" + "writer" + "</td>";
+			result += "<td>" + "날짜" + "</td>";
+			result += "<td>" + "삭제 버튼" + "</td>";
+			result += "</tr>";
 			for(Map m : boardList)
 			{
-				result += m.toString();
+				result += "<tr>";
+				result += "<td>" + m.get("num") + "</td>";
+				result += "<td>" + m.get("title") + "</td>";
+				result += "<td>" + m.get("content") + "</td>";
+				result += "<td>" + m.get("writer") + "</td>";
+				result += "<td>" + m.get("reg_date") + "</td>";
+				result += "<td><input type='button' value='삭제' onclick='deleteBoard(" + m.get("num") + ")'/></td>";
+				result += "</tr>";
 			}
+			result += "</table>";
 			doProcess(resq, result);
 		}
 		else if(command.equals("UPDATE"))

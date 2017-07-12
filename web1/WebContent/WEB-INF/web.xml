@@ -31,4 +31,12 @@
     <servlet-name>CommentServlet</servlet-name>
     <url-pattern>*.comment</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>calServlet</servlet-name>
+    <servlet-class>com.test.servlet.calServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>calServlet</servlet-name>
+    <url-pattern>*.cal</url-pattern>
+  </servlet-mapping>
 </web-app>
