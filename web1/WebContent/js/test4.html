@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function makeThing(tObj)
+{
+	var fObj = tObj.form.elements[0];
+	var result = new Number(fObj.value);
+	if(isNaN(result))
+	{
+		alert("정수만 입력해주세요!!");
+		fObj.focus();
+		return false;
+	}
+	var divObj = document.getElementById("r_div");
+	var inputStr = "";
+	for(var i = 0; i < result; i++)
+	{
+		inputStr += "<input type='text' id='mk" + (i + 1) + "'/>";
+	}
+	function search(sObj)
+	{
+		var faObj = sObj.from;
+		
+		
+	}
+	inputStr += "<br/>찾을 값 : <input type='text' id='searchValue'/>";
+	inputStr += "<input type='button' value='값 찾기' onclick='search(this)'/>";
+	divObj.innerHTML = inputStr;
+	return true;
+}
+</script>
+<body>
+<form onsubmit="return fatherFn(this)" action="test4.html">
+생성개수 : <input type="text" name="makeNum"/>
+<input type="button" value="생성" onclick="makeThing(this)"/>
+<div id="r_div"></div>
+</form>
+</body>
+</html>

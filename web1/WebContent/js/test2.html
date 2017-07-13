@@ -12,7 +12,7 @@ function searchFather(eObj)
 	for(var i = 0; i < fObj.elements.length; i++)
 	{
 		var aObj = fObj.elements[i];
-		var result = new Number(aObj);
+		var result = new Number(aObj.value);
 		if(i%2==1 && isNaN(result))
 		{
 			alert(i + "번째에는 정수만 입력해주세요");
@@ -20,6 +20,7 @@ function searchFather(eObj)
 			return false;
 		}
 	}
+	return true;
 }
 </script>
 <body>

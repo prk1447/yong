@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function getAllValue()
+{
+	var elObj = document.getElementsByName("txt");
+	for(var i = 0; i < elObj.length; i++)
+	{
+		alert(elObj[i].value);
+	}
+}
+</script>
+<body>
+<form>
+<input type="text" id="blur1" name="txt"/>
+<input type="text" id="blur2" name="txt"/>
+<input type="text" id="blur3" name="txt"/>
+<input type="button" value="모든값 가져오기" onclick="getAllValue()"/>
+</form>
+</body>
+</html>
