@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function searchFather(eObj)
+{
+	var resultStr = "";
+	var fObj = eObj.form;
+	for(var i = 0; i < fObj.elements.length; i++)
+	{
+		var aObj = fObj.elements[i];
+		var result = new Number(aObj);
+		if(i%2==1 && isNaN(result))
+		{
+			alert(i + "번째에는 정수만 입력해주세요");
+			aObj.focus();
+			return false;
+		}
+	}
+}
+</script>
+<body>
+<form onsubmit="return checkForm(this)" action="test2.html">
+<input type="text"/><br/>
+<input type="text"/><br/>
+<input type="text"/><br/>
+<input type="text"/><br/>
+<input type="text"/><br/>
+<input type="text"/><br/>
+<input type="button" value="전송" onclick="searchFather(this)"/>
+</form>
+</body>
+</html>
