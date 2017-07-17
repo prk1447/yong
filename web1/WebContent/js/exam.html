@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function addText()
+{
+	var divObj = document.getElementById("e_div");
+	var eObj = document.getElementById("makeText");
+	var result = new Number(eObj.value);
+	if(isNaN(result))
+	{
+		alert("숫자만 입력해주세여!!");
+		eObj.focus();
+	}
+	var inputStr="";
+	for(var i = 0; i < eObj.value; i++)
+	{
+		inputStr += "<input type='text' name='txt'/>";
+	}
+	divObj.innerHTML = inputStr;
+}
+function search()
+{
+	var tObj = document.getElementsByName("txt");
+	var sObj = document.getElementById("searchValue");
+	for(var i = 0; i < tObj.length; i++)
+	{
+		if(tObj[i].value.indexOf(sObj.value) >= 0)
+		{
+			tObj[i].focus;
+			tObj[i].value = "찾앗다.";
+		}
+	}
+}
+</script>
+<body>
+<input type="text" name="makeTxt" id="makeText"/>
+<input type="button" value="생성" onclick="addText()"/>
+<div id="e_div"></div>
+<input type="text" name="searchValue" id="searchValue"/>
+<input type="button" value="값 찾기" onclick="search()"/>
+</body>
+</html>
