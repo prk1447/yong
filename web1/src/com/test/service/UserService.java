@@ -20,15 +20,18 @@ public class UserService
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "insert into user_info(id, pwd, name, class_num, age)";
-			sql += " values(?,?,?,?,?)";
+			String sql = "insert into user_info(userid, userpwd, username, age, address, hp1, hp2, hp3)";
+			sql += " values(?,?,?,?,?,?,?,?)";
 			
 			ps = con.prepareStatement(sql);
 			ps.setString(1, (String)hm.get("id"));
 			ps.setString(2, (String)hm.get("pwd"));
 			ps.setString(3, (String)hm.get("name"));
-			ps.setString(4, (String)hm.get("class_num"));
-			ps.setString(5, (String)hm.get("age"));
+			ps.setString(4, (String)hm.get("age"));
+			ps.setString(5, (String)hm.get("address"));
+			ps.setString(6, (String)hm.get("hp1"));
+			ps.setString(7, (String)hm.get("hp2"));
+			ps.setString(8, (String)hm.get("hp3"));
 			int result = ps.executeUpdate();
 			if(result == 1)
 			{
@@ -60,6 +63,36 @@ public class UserService
 		return false;
 	}
 	
+	public boolean loginUser(HashMap hm)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			con = DBConn2.getCon();
+			String sql = "select * from user_info";
+			sql += " where userid=? and userpwd=?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, (String)hm.get("userid"));
+			ps.setString(2, (String)hm.get("userpwd"));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				return true;
+			}
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	public boolean deleteUser(HashMap hm)
 	{
 		Connection con = null;
@@ -67,9 +100,9 @@ public class UserService
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "delete from user_info where num=?";
+			String sql = "delete from user_info where usernum=?";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, (String)hm.get("num"));
+			ps.setString(1, (String)hm.get("usernum"));
 			int result = ps.executeUpdate();
 			if(result > 0)
 			{
@@ -100,79 +133,38 @@ public class UserService
 		}
 		return false;
 	}
-	
-	public boolean userUpdate(HashMap hm)
-	{
-		Connection con = null;
-		PreparedStatement ps = null;
-		try
-		{
-			con = DBConn2.getCon();
-			String sql = "update user_info set name=?, class_num=?, age=? where num=?";
-			ps = con.prepareStatement(sql);
-			ps.setString(1, (String)hm.get("name"));
-			ps.setString(2, (String)hm.get("class_num"));
-			ps.setString(3, (String)hm.get("age"));
-			ps.setString(4, (String)hm.get("num"));
-			int result = ps.executeUpdate();
-			if(result == 1)
-			{
-				con.commit();
-				return true;
-			}
-		}
-		catch(ClassNotFoundException e)
-		{		
-			e.printStackTrace();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				con.rollback();
-				ps.close();
-				DBConn2.closeCon();
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
-	
+
 	public List<Map> selectUser(HashMap<String, String> hm)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try
 		{
-			String sql = "select num, id, pwd, name, age, class_num from user_info";
-			if(hm.get("name") != null)
+			String sql = "select usernum, userid, userpwd, username, age, address, hp1, hp2, hp3 from user_info";
+			if(hm.get("username") != null)
 			{
-				sql += " where name like ?";
+				sql += " where username like ?";
 			}
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
-			if(hm.get("name") != null)
+			if(hm.get("username") != null)
 			{
-				ps.setString(1, hm.get("name"));
+				ps.setString(1, hm.get("username"));
 			}
 			ResultSet rs = ps.executeQuery();
 			List userList = new ArrayList();
 			while(rs.next())
 			{
 				HashMap hm2 = new HashMap();
-				hm2.put("num", rs.getString("num"));
-				hm2.put("id", rs.getString("id"));
-				hm2.put("pwd", rs.getString("pwd"));
-				hm2.put("name", rs.getString("name"));
+				hm2.put("usernum", rs.getString("usernum"));
+				hm2.put("userid", rs.getString("userid"));
+				hm2.put("userpwd", rs.getString("userpwd"));
+				hm2.put("username", rs.getString("username"));
 				hm2.put("age", rs.getString("age"));
-				hm2.put("class_num", rs.getString("class_num"));
+				hm2.put("address", rs.getString("address"));
+				hm2.put("hp1", rs.getString("hp1"));
+				hm2.put("hp2", rs.getString("hp2"));
+				hm2.put("hp3", rs.getString("hp3"));
 				userList.add(hm2);
 			}
 			return userList;

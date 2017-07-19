@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function getHttpXmlObj()
+{
+    //해당브라우져가 익스플로러 7.0 이상이거나 파이어폭스, 크롭 등일경우
+	if(window.XMLHttpRequest)
+	{
+  		return new XMLHttpRequest();
+ 	}
+	else if(window.ActiveXObject)
+	{
+  		//해당 브라우져가 익스플로러 6.0 이하일경우
+  		return new ActiveXObject("Microsoft.XMLHTTP");
+ 	}
+	//해당 브라우져가 듣보잡일경우.. 어떤 브라우져 인진 나도 모름.
+	alert("해당 브라우져가  Ajax를 지원하지 않습니다.");
+}
+function checkLogin()
+{
+	var loginStr = "userid,userpwd,command";
+	var logins = loginStr.split(",");
+	
+	var params = "?";
+	
+	for(var i = 0; i < logins.length; i++)
+	{
+		var lObj = document.getElementById(logins[i]);
+		//아이디 & 비밀번호 값에 빈 문자열이 아무것도 없을떄 처리
+		if(lObj.value == "")
+		{
+			alert("아이디나 비밀번호를 입력해주세요");
+			lObj.focus();
+			return;
+		}
+		params += logins[i] + "=" + lObj.value + "&";
+	}
+	var xhr = getHttpXmlObj();
+	var method = "get";
+	var url = "login.user";
+	var aSync = true;
+	xhr.onreadystatechange=function()
+	{
+		if(xhr.readyState == 4 && xhr.status == 200)
+		{
+			var result = decodeURIComponent(xhr.responseText);
+			alert(result);
+		}
+	}
+	xhr.open(method, url + params, aSync);
+	if(method == "post")
+	{
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+	xhr.send();
+}
+</script>
+<body>
+<form action="test.user">
+<table border="1">
+<tr>
+	<td colspan="2"><p align="center"> = 로그인 = </p></td>
+</tr>
+<tr>
+	<td>아이디</td>
+	<td><input type="text" name="userid" id="userid"/></td>
+</tr>
+<tr>
+	<td>비밀번호</td>
+	<td><input type="password" name="userpwd" id="userpwd"/></td>
+</tr>
+<tr>
+	<td colspan="2" align="center"><input type="button" value="로그인" onclick="checkLogin()"/></td>
+</tr>
+</table>
+<input type="hidden" name="command" id="command" value="LOGIN"/>
+</form>
+</body>
+</html>

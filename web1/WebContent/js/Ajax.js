@@ -22,7 +22,7 @@ var AjaxUtil = function(url, allParams, method, aSync)
 			}
 		}
 	}
-	xmlHttpObj.open(method, url + params, sync);
+	xmlHttpObj.open(method, url + params, sync); 
 	if(method == "post")
 	{
 		xmlHttpObj.setRequesHeader("Content-type", "application/x-www-form-urlencoded");

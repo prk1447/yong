@@ -13,7 +13,7 @@ public class DBConn2 {
 		if (con == null)
 		{
 			Class.forName("org.mariadb.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/iot_test", "root", "dyfmdyfm12");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/iot", "root", "dyfmdyfm12");
 			con.setAutoCommit(false);
 		}
 		return con;
