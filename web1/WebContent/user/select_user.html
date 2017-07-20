@@ -4,10 +4,178 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script>
+function getHttpXmlObj()
+{
+    //해당브라우져가 익스플로러 7.0 이상이거나 파이어폭스, 크롭 등일경우
+	if(window.XMLHttpRequest)
+	{
+  		return new XMLHttpRequest();
+ 	}
+	else if(window.ActiveXObject)
+	{
+  		//해당 브라우져가 익스플로러 6.0 이하일경우
+  		return new ActiveXObject("Microsoft.XMLHTTP");
+ 	}
+	//해당 브라우져가 듣보잡일경우.. 어떤 브라우져 인진 나도 모름.
+	alert("해당 브라우져가  Ajax를 지원하지 않습니다.");
+}
+function doDelete(userNum)
+{
+	var str = "usernum=" + userNum + "&command=DELETE&";
+	var params = "?";
+	var isDelete = confirm(userNum + "번 번호를 삭제하시겠습니까?");
+	if(isDelete == true)
+	{
+		params += str;
+		var xhr = getHttpXmlObj();
+		var method = "get";
+		var url = "delete.user";
+		var aSync = true;
+		xhr.onreadystatechange=function()
+		{
+			if(xhr.readyState == 4 && xhr.status == 200)
+			{
+				var result = decodeURIComponent(xhr.responseText);
+				alert(result);
+			}
+			else
+			{
+				document.getElementById("u_div").innerHTML += xhr.responseText;
+			}
+		}
+		xhr.open(method, url + params, aSync);
+		if(method == "post")
+		{
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		}
+		xhr.send();
+	}
+	else
+	{
+		return;
+	}
+}
+function doUpdate()
+{
+	
+}
+function doSelect()
+{
+	var idStr = "username,command";
+	var lengthStr = "30,100";
+	var typeStr = "s,s";
+	var params = "?";
+	var ids = idStr.split(",");
+	var lengths = lengthStr.split(",");
+	var types = typeStr.split(",");
+	for(var i = 0; i < ids.length; i++)
+	{
+		var maxLength = new Number(lengths[i]);
+		var typeVali = types[i];
+		var elObj = document.getElementById(ids[i]);
+		if(!isNaN(maxLength))
+		{
+			if(elObj.value.length > maxLength)
+			{
+				alert("제한길이를 넘었습니다. 확인해주세요");
+				elObj.value = "";
+				elObj.focus();
+				return;
+			}
+		}
+		if(typeVali=="n")
+		{
+			if(isNaN(new Number(elObj.value)))
+			{
+				alert("숫자만 입력해주세요");
+				elObj.value = "";
+				elObj.focus();
+				return
+			}
+		}
+		params += ids[i] + "=" + elObj.value + "&";	
+	}
+	var xhr = getHttpXmlObj();
+	var method = "get";
+	var url = "test.user";
+	var aSync = true;
+	xhr.onreadystatechange=function()
+	{
+		if(xhr.readyState == 4 && xhr.status == 200)
+		{
+			var result = decodeURIComponent(xhr.responseText);
+			var rows = result.split("{+}");
+			var tdEnables = rows[1].split("{/}");
+			var tableStr = "<table border='1'>";
+			for(var i = 0; i < rows.length; i++)
+			{
+				if(i==1)
+				{
+					continue;
+				}
+				tableStr += "<tr>";
+				var colums = rows[i].split("{/}");
+				var userNum;
+				for(var j = 0; j < colums.length; j++)
+				{
+					if(j==0)
+					{
+						userNum = colums[j];
+					}
+					if(i == 0)
+					{
+						tableStr += "<td>" + colums[j] + "</td>";
+					}
+					else
+					{
+						if(tdEnables[j] == "en")
+						{
+							tableStr += "<td><input type='text' value='" + colums[j] + "'/></td>";
+						}
+						else
+						{
+							tableStr += "<td><input type='text' value='" + colums[j] + "'/></td>";
+						}
+					}
+				}
+				if(i==0)
+				{
+					tableStr += "<td>삭제</td>";
+					tableStr += "<td>수정</td>";
+				}
+				else
+				{
+					tableStr += "<td><input type='button' value='삭제' onclick='doDelete(" + userNum + ")'/></td>";
+					tableStr += "<td><input type='button' value='수정' onclick='doUpdate(" + ")'/></td>";
+				}
+				tableStr += "</tr>";
+			}
+			if(rows.length == 1)
+			{
+				tableStr = "<tr><td colspan='3'>니가 검색한거 없어 임마</td></tr>";
+			}
+			tableStr += "</table>";
+			document.getElementById("u_div").innerHTML += tableStr
+			alert(result);
+		}
+		else
+		{
+			document.getElementById("u_div").innerHTML += xhr.responseText;
+		}
+	}
+	xhr.open(method, url + params, aSync);
+	if(method == "post")
+	{
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+	xhr.send();
+}
+</script>
 <body>
-<form action="*.user">
-이름 : <input type="text" name="username" id="username"/> <input type="submit" value="검색"/>
-<input type="hidden" name="command" value="SELECT"/>
-</form>
+이름 : <input type="text" name="username" id="username"/>
+ <input type="button" value="검색" onclick="doSelect()"/>
+<input type="hidden" name="command" id="command" value="SELECT"/>
+<div id="u_div"></div>
 </body>
 </html>

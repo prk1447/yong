@@ -116,6 +116,7 @@ public class UserServlet extends HttpServlet{
 			}
 			System.out.println("삭제할 번호 : " + num);
 		}
+		
 		else if(command.equals("SELECT"))
 		{
 			UserService us = new UserService();
@@ -123,51 +124,19 @@ public class UserServlet extends HttpServlet{
 			HashMap hm = new HashMap();
 			if(userName != null && !userName.equals(""))
 			{
-				hm.put("name", "%" + userName + "%");
+				hm.put("username", "%" + userName + "%");
 			}
 			List<Map> userList = us.selectUser(hm);
-			String result = "<script>";
-			result += "function deleteUser(usernum){";
-			result += "location.href='delete.user?command=DELETE&usernum=' + usernum;";
-			result += "}";
-			result += "</script>";
-			result += "<form action='*.user'>";
-			result += "이름 : <input type='text' name='username' id='username'/> <input type='submit' value='검색'/>";
-			result += "<input type='hidden' name='command' value='SELECT'/>";
-			result += "</form>";
-			result += "<table border='1'>";
-			result += "<tr>";
-			result += "<td>" + "유저번호" + "</td>";
-			result += "<td>" + "유저아이디" + "</td>";
-			result += "<td>" + "유저비밀번호" + "</td>";
-			result += "<td>" + "유저이름" + "</td>";
-			result += "<td>" + "나이" + "</td>";
-			result += "<td>" + "주소" + "</td>";
-			result += "<td>" + "hp1" + "</td>";
-			result += "<td>" + "hp2" + "</td>";
-			result += "<td>" + "hp3" + "</td>";
-			result += "<td>" + "삭제버튼" + "</td>";
-			result += "</tr>";
+			String result = "";
+			result += "번호{/}이름{/}아이디{/}나이{+}";
+			result += "dis{/}en{/}en{/}en{+}";
 			for(Map m : userList)
 			{
-				result += "<tr>";
-				result += "<td>" + m.get("usernum") + "</td>";
-				result += "<td>" + m.get("userid") + "</td>";
-				result += "<td>" + m.get("userpwd") + "</td>";
-				result += "<td>" + m.get("username") + "</td>";
-				result += "<td>" + m.get("age") + "</td>";
-				result += "<td>" + m.get("address") + "</td>";
-				result += "<td>" + m.get("hp1") + "</td>";
-				result += "<td>" + m.get("hp2") + "</td>";
-				result += "<td>" + m.get("hp3") + "</td>";
-				result += "<td align='center'><input type='button' value='삭제' onclick='deleteUser(" + m.get("usernum") + ")'/></td>";
-				result += "</tr>";
+				result += m.get("usernum") + "{/}" + m.get("username") + "{/}" + m.get("userid") + "{/}" + m.get("age") + "{+}";
 			}
-			result += "</table>";
+			result = result.substring(0, result.length()-3);
 			doProcess(resq, result);
 		}
-		
-		
 	}
 	
 	public void dePost(HttpServletRequest req, HttpServletResponse reqs) throws IOException{
