@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.test.dto.UserInfo;
 import com.test.service.UserService;
 
 public class UserServlet extends HttpServlet{
@@ -50,28 +51,18 @@ public class UserServlet extends HttpServlet{
 			String hp1 = req.getParameter("hp1");
 			String hp2 = req.getParameter("hp2");
 			String hp3 = req.getParameter("hp3");
-			
-			
+			UserInfo ui = new UserInfo();
+			ui.setuserId(id);
+			ui.setUserPwd(pwd);
+			ui.setUserName(name);
+			ui.setAge(Integer.parseInt(age));
+			ui.setAddress(address);
+			ui.setHp1(hp1);
+			ui.setHp2(hp2);
+			ui.setHp3(hp3);
 			//위에서 받은 String 변수를 출력해줌(Tomcat 콘솔창에)
 			System.out.println(id + "," + pwd + "," + name + "," + age + ", " + address + "," + hp1 + "-" + hp2 + "-" + hp3);
-			//해쉬맵 생성
-			HashMap hm = new HashMap();
-			//html화면에서 던진 id값을 "id"라는 키로 해쉬맵에 저장
-			hm.put("id", id);
-			//html화면에서 던진 pwd값을 "pwd"라는 키로 해쉬맵에 저장
-			hm.put("pwd", pwd);
-			//html화면에서 던진 name값을 "name"라는 키로 해쉬맵에 저장
-			hm.put("name", name);
-			//html화면에서 던진 class_num값을 "class_num"라는 키로 해쉬맵에 저장
-			hm.put("age", age);
-			//html화면에서 던진 age값을 "age"라는 키로 해쉬맵에 저장
-			hm.put("address", address); 
-			hm.put("hp1", hp1);
-			hm.put("hp2", hp2);
-			hm.put("hp3", hp3);
-			//위에서 생성한 us래퍼런스 변수를 사용해 insertUser함수를 호출하는데 파라메터값은
-			//위에서 생성하고 값을 저장한 HashMap인 hm래퍼런스 변수를 같이 던짐
-			if(us.insertUser(hm))
+			if(us.insertUser(ui))
 			{
 				doProcess(resq, "회원가입 성공");
 			}
@@ -83,14 +74,13 @@ public class UserServlet extends HttpServlet{
 		else if(command.equals("LOGIN"))
 		{
 			UserService us = new UserService();
+			UserInfo ui = new UserInfo();
 			String userId = req.getParameter("userid");
 			String userPwd = req.getParameter("userpwd");
+			ui.setuserId(userId);
+			ui.setUserPwd(userPwd);
 			
-			HashMap hm = new HashMap();
-			hm.put("userid", userId);
-			hm.put("userpwd", userPwd);
-			
-			if(us.loginUser(hm))
+			if(us.loginUser(ui))
 			{
 				doProcess(resq, "로그인에 성공");
 			}
@@ -102,11 +92,10 @@ public class UserServlet extends HttpServlet{
 		else if(command.equals("DELETE"))
 		{
 			UserService us = new UserService();
+			UserInfo ui = new UserInfo();
 			String num = req.getParameter("usernum");
-			HashMap hm = new HashMap();
-			hm.put("usernum", num);
-			boolean isDelete = us.deleteUser(hm);
-			if(isDelete)
+			ui.setUserNum(Integer.parseInt(num));
+			if(us.deleteUser(ui))
 			{
 				doProcess(resq, "user_info에 있는 " + num + "의값이 지워졌습니다.");
 			}
@@ -120,22 +109,38 @@ public class UserServlet extends HttpServlet{
 		else if(command.equals("SELECT"))
 		{
 			UserService us = new UserService();
+			UserInfo ui = new UserInfo();
 			String userName = req.getParameter("username");
-			HashMap hm = new HashMap();
 			if(userName != null && !userName.equals(""))
 			{
-				hm.put("username", "%" + userName + "%");
+				ui.setUserName("%" + userName + "%");
 			}
-			List<Map> userList = us.selectUser(hm);
+			List<UserInfo> userList = us.selectUser(ui);
 			String result = "";
 			result += "번호{/}이름{/}아이디{/}나이{+}";
 			result += "dis{/}en{/}en{/}en{+}";
-			for(Map m : userList)
+			for(UserInfo m : userList)
 			{
-				result += m.get("usernum") + "{/}" + m.get("username") + "{/}" + m.get("userid") + "{/}" + m.get("age") + "{+}";
+				result += m.getUserNum() + "{/}" + m.getUserName() + "{/}" + m.getuserId() + "{/}" + m.getAge() + "{+}";
 			}
 			result = result.substring(0, result.length()-3);
 			doProcess(resq, result);
+		}
+		else if(command.equals("UPDATE"))
+		{
+			UserInfo ui = new UserInfo();
+			UserService us = new UserService();
+			String userId = req.getParameter("userid");
+			String userName = req.getParameter("userName");
+			boolean isDelete = us.updateUser(ui);
+			if(isDelete)
+			{
+				doProcess(resq, "업데이트 완료");
+			}
+			else
+			{
+				doProcess(resq, "업데이트 실패");
+			}
 		}
 	}
 	
