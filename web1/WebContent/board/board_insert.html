@@ -7,23 +7,16 @@
 <script>
 function checkValue()
 {
-	var titleObj = document.getElementById("title");
+	var titleObj = document.getElementById("bititle");
 	if(titleObj.value.trim() == "")
 	{
 		alert("제목을 입력해 주세요");
 		return false;
 	}
-	var contentObj = document.getElementById("content");
+	var contentObj = document.getElementById("bicontent");
 	if(contentObj.value.trim() == "")
 	{
 		alert("내용을 입력해 주세요");
-		return false;
-	}
-	var userNumObj = document.getElementById("user_num");
-	var userNum = parseInt(userNumObj.value);
-	if(isNaN(userNum))
-	{
-		alert("숫자를 입력해 주세요");
 		return false;
 	}
 	return true;
@@ -32,9 +25,10 @@ function checkValue()
 </script>
 <body>
 <form method="get" action="*.board" onsubmit="return checkValue()">
-제목 : <input type="text" name="title" id="title"/><br/>
-내용 : <textarea name="content" id="content"></textarea><br/>
-글쓴이 : <input type="text" name="user_num" id="user_num"/><br/>
+제목 : <input type="text" name="bititle" id="bititle"/><br/>
+내용 : <textarea name="bicontent" id="bicontent"></textarea><br/>
+비밀번호 : <input type="password" name="bipwd" id="bipwd"/><br/>
+작성자 이름 : <input type="text" name="creusr" id="creusr"/><br/>
 <input type="submit" value="글쓰기"/>
 <input type="hidden" name="command" id="command" value="INSERT"/>
 </form>

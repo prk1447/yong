@@ -7,26 +7,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.test.common.DBConn2;
+import com.test.dto.BoardInfo;
 
 public class BoardService 
 {
-	public boolean boardInsert(HashMap hm)
+	public boolean boardInsert(BoardInfo bi)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "insert into board(title, content, writer, reg_date)";
-			sql += " values(?,?,?,now())";
-			
+			String sql = "insert into board_info(bititle, bicontent, bipwd, creusr, credat)";
+			sql += " values(?,?,?,?,now())";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, (String)hm.get("title"));
-			ps.setString(2, (String)hm.get("content"));
-			ps.setString(3, (String)hm.get("user_num"));
+			ps.setString(1, bi.getBiTitle());
+			ps.setString(2, bi.getBiContent());
+			ps.setString(3, bi.getBiPwd());
+			ps.setString(4, bi.getCreusr());
 			int result = ps.executeUpdate();
 			if(result == 1)
 			{
@@ -45,16 +45,16 @@ public class BoardService
 		return false;
 	}
 	
-	public boolean boardDelete(HashMap hm)
+	public boolean boardDelete(BoardInfo bi)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "delete from board where num=?";
+			String sql = "delete from board_info where binum=?";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, (String)hm.get("num"));
+			ps.setInt(1, bi.getBiNum());
 			int result = ps.executeUpdate();
 			if(result > 0)
 			{
@@ -73,34 +73,31 @@ public class BoardService
 		return false;
 	}
 
-	public List<Map> boardSelect(HashMap<String, String> hm)
+	public List<BoardInfo> boardSelect(BoardInfo bi)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "select num, title, content, writer, reg_date from board";
-			if(hm.get("title") != null)
+			String sql = "select  from board_info";
+			if(bi.getBiTitle() != null)
 			{
-				sql += " where title like ?";
+				sql += " where bititle like ?";
 			}
 			ps = con.prepareStatement(sql);
-			if(hm.get("title") != null)
+			if(bi.getBiTitle() != null)
 			{
-				ps.setString(1, (String)hm.get("title"));
+				ps.setString(1, bi.getBiTitle());
 			}
 			ResultSet rs = ps.executeQuery();
 			List boardList = new ArrayList();
 			while(rs.next())
 			{
-				HashMap hm2 = new HashMap();
-				hm2.put("num", rs.getString("num"));
-				hm2.put("title", rs.getString("title"));
-				hm2.put("content", rs.getString("content"));
-				hm2.put("writer", rs.getString("writer"));
-				hm2.put("reg_date", rs.getString("reg_date"));
-				boardList.add(hm2);
+				BoardInfo bi2 = new BoardInfo();
+				bi2.setBiNum(rs.getInt("binum"));
+				bi2.setBiTitle(rs.getString("bititle"));
+				bi2.setBiContent(rs.getString("bicontent"));
 			}
 			return boardList;
 		}
@@ -122,7 +119,7 @@ public class BoardService
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "update board set title=?, content=? where num=?";
+			String sql = "update board_info set bititle=?, bicontent=? where num=?";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, (String)hm.get("title"));
 			ps.setString(2, (String)hm.get("content"));
