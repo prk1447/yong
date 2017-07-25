@@ -69,7 +69,7 @@ public class BoardServlet extends HttpServlet{
 		}
 		else if(command.equals("SELECT"))
 		{
-			String title = req.getParameter("title");
+			String title = req.getParameter("bititle");
 			if(title != null && !title.equals(""))
 			{
 				bi.setBiTitle("%" + title + "%");
@@ -80,9 +80,9 @@ public class BoardServlet extends HttpServlet{
 			result += "dis{/}en{/}en{/}en{+}";
 			for(BoardInfo m : boardList)
 			{
-				result += m.getBiNum() + "{/}" + m.getBiTitle() + "{/}" + m.getBiContent()  + "{/]" + m.getCreusr() + "{+}";
+				result += m.getBiNum() + "{/}" + m.getBiTitle() + "{/}" + m.getBiContent()  + "{/}" + m.getCreusr() + "{+}";
 			}
-			result = result.substring(0, result.length()-2);
+			result = result.substring(0, result.length()-3);
 			doProcess(resq, result);
 		}
 		else if(command.equals("UPDATE"))

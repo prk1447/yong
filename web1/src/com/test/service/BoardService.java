@@ -80,7 +80,7 @@ public class BoardService
 		try
 		{
 			con = DBConn2.getCon();
-			String sql = "select  from board_info";
+			String sql = "select binum, bititle, bicontent, bipwd, creusr, credat from board_info";
 			if(bi.getBiTitle() != null)
 			{
 				sql += " where bititle like ?";
@@ -98,6 +98,10 @@ public class BoardService
 				bi2.setBiNum(rs.getInt("binum"));
 				bi2.setBiTitle(rs.getString("bititle"));
 				bi2.setBiContent(rs.getString("bicontent"));
+				bi2.setBiPwd(rs.getString("bipwd"));
+				bi2.setCreusr(rs.getString("creusr"));
+				bi2.setCredat(rs.getString("credat"));
+				boardList.add(bi2);
 			}
 			return boardList;
 		}

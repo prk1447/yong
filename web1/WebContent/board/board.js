@@ -2,7 +2,7 @@
  * 
  */
 
-var AjaxUtil = function(params){
+var BoardUtil = function(params){
 	this.params = params;
 	
 	getHttpXmlObj = function(){
@@ -15,7 +15,7 @@ var AjaxUtil = function(params){
 	}
 	this.xhr = getHttpXmlObj();
 	var method = "get";
-	var url = "*.user";
+	var url = "*.board";
 	var aSync = true;
 	this.xhr.onreadystatechange=function(){
    		if (this.readyState==4){

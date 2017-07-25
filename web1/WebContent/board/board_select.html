@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<script src="/js/Ajax.js"></script>
+<script src="/board/board.js"></script>
 <script>
 function boSelect()
 {
@@ -42,7 +42,7 @@ function boSelect()
 		}
 		params += ids[i] + "=" + elObj.value + "&";	
 	}
-	var au = new AjaxUtil(params);
+	var au = new BoardUtil(params);
 	au.changeCallBack(function()
 	{
 		if(au.xhr.readyState == 4 && au.xhr.status == 200)
@@ -59,7 +59,7 @@ function boSelect()
 				}
 				tableStr += "<tr>";
 				var colums = rows[i].split("{/}");
-				var userNum;
+				var boardNum;
 				for(var j = 0; j < colums.length; j++)
 				{
 					if(j==0)						
@@ -74,7 +74,7 @@ function boSelect()
 					{
 						if(tdEnables[j] == "en")
 						{
-							tableStr += "<td><input type='text' value='" + colums[j] + "' id='r" + userNum + j + "'/></td>";
+							tableStr += "<td><input type='text' value='" + colums[j] + "' id='r" + boardNum + j + "'/></td>";
 						}
 						else
 						{
@@ -89,8 +89,8 @@ function boSelect()
 				}
 				else
 				{
-					tableStr += "<td><input type='button' value='삭제' onclick='doDelete(" + userNum + ")'/></td>";
-					tableStr += "<td><input type='button' value='수정' onclick='doUpdate(" + userNum + ")'/></td>";
+					tableStr += "<td><input type='button' value='삭제' onclick='doDelete(" + boardNum + ")'/></td>";
+					tableStr += "<td><input type='button' value='수정' onclick='doUpdate(" + boardNum + ")'/></td>";
 				}
 				tableStr += "</tr>";
 			}
@@ -111,11 +111,9 @@ function boSelect()
 }
 </script>
 <body>
-<form action="*.board">
 title 검색 : <input type="text" name="bititle" id="bititle"/><br/>
 <input type="button" value="검색" onclick="boSelect()"/>
 <input type="hidden" name="command" id="command" value="SELECT"/>
 <div id="b_div"></div>
-</form>
 </body>
 </html>

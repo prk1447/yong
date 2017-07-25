@@ -10,6 +10,12 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%!
+public void printStr(String str)
+{
+	System.out.println("asdasd");
+}
+%>
 <%
 String id =request.getParameter("id");
 String pwd = request.getParameter("pwd");
@@ -71,8 +77,7 @@ else
 }
 %>
 <script>
-var result = "<%=result%>";
-alert(result);
+alert("<%=result%>");
 location.href="/user/login.jsp";
 </script>
 </body>
