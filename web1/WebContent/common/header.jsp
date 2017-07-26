@@ -28,6 +28,9 @@ if(userId != null)
 	hp3 = (String) session.getAttribute("hp3");
 	login = true;
 }
+
+String tePwd = (String) session.getAttribute("pwdequls");
+
 String rootPath = request.getContextPath();
 Date toDate = new Date();
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -37,7 +40,7 @@ String toDateStr = sdf.format(toDate);
 <script>
 var rootPath = "<%=rootPath%>";
 
-function doMovePage(pageId)
+function doMovePage(pageId,binum,delObjId)
 {
 	var url = "";
 	if(pageId == "board")
@@ -47,6 +50,11 @@ function doMovePage(pageId)
 	else if(pageId == "main")
 	{
 		url = rootPath + "/";
+	}
+	else if(pageId == "delete")
+	{ 
+		var bipwd = document.getElementById(delObjId).value;
+		url = rootPath + "/board/board_delete.jsp?binum=" + binum + "&bipwd=" + bipwd;		
 	}
 	location.href=url;
 }

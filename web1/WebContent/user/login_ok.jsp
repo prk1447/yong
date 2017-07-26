@@ -20,6 +20,7 @@ public void printStr(String str)
 String id =request.getParameter("id");
 String pwd = request.getParameter("pwd");
 String result = "";
+
 if(id != null && pwd != null)
 {
 	Connection con = null;
@@ -68,6 +69,18 @@ if(id != null && pwd != null)
 	catch(SQLException e)
 	{
 		e.printStackTrace();
+	}
+	finally
+	{
+		if(ps != null)
+		{
+			ps.close();
+			ps = null;
+		}
+		if(con != null)
+		{
+			DBConn2.closeCon();
+		}
 	}
 }
 else
