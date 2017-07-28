@@ -10,15 +10,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%!
-public void printStr(String str)
-{
-	System.out.println("asdasd");
-}
-%>
 <%
-String id =request.getParameter("id");
-String pwd = request.getParameter("pwd");
+String id =request.getParameter("userid");
+String pwd = request.getParameter("userpwd");
 String result = "";
 
 if(id != null && pwd != null)
@@ -91,7 +85,7 @@ else
 %>
 <script>
 alert("<%=result%>");
-location.href="/user/login.jsp";
+location.href="/main.jsp";
 </script>
 </body>
 </html>

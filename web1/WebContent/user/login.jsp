@@ -3,70 +3,31 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="com.test.dto.UserInfo" %>
-<script>
-var setObj;
-var loopCount = 0;
-function doSign()
-{
-	location.href="/user/sign_in.html";	
-}
-function doLogOut()
-{
-	location.href = rootPath + "/user/login_ok.jsp";
-}
-/*
-function doStartTimer()
-{
-	setObj = setInterval(function()
-		{
-			if(loopCount == 10)
-			{
-				clearInterval(setObj);
-			}
-			else
-			{
-				loopCount++;
-				alert("안녕하세요");
-			}
-		}
-		,1000);	
-}
-function doStopTimer()
-{
-	clearInterval(setObj);
-}
-*/
-</script>
+<link rel="stylesheet" href="<%=rootPath%>/ui/signin.css"/>
 <body>
-<%
-if(login)
-{
-	out.println("현재시간 : " + toDateStr);
-	out.println("<br/>");
-	out.println("== " + userId + "님 의 정보 ==");
-	out.println("<br/>");
-	out.println("성명 : " + userName);
-	out.println("<br/>");
-	out.println("나이 : " + age);
-	out.println("<br/>");
-	out.println("주소 : " + address);
-	out.println("<br/>");
-	out.println("전화번호 : " + hp1 + "-" + hp2 + "-" + hp3);
-	out.println("<br/>");
-	out.println("<input type='button' value='로그아웃' onclick='doLogOut()'/>");
-	out.println("<input type='button' value='게시판보기' onclick='doMovePage(\"board\")'/>");
-}
-else
-{
-%>
-<form action="<%=rootPath%>/user/login_ok.jsp">
-ID : <input type="text" name="id"/><br/>
-PWD : <input type="password" name="pwd"/><br/>
-<input type="submit" value="LOGIN"/>
-<input type="button" value="SIGN" onclick="doSign()"/>
-</form>
-<%
-}
-%>
+<jsp:include page="/common/top.jsp" flush="false">
+	<jsp:param value="<%=login%>" name="login"></jsp:param>
+</jsp:include>
+<div class="container">
+	<center><img src="http://logofury.com/wp-content/uploads/2004/skype-logo.jpg" style="width:304px;height:250px"/></center>
+	<form class="form-signin" action="<%=rootPath%>/user/login_ok.jsp">
+		<h2 class="form-signin-heading" align="center">로그인</h2>
+		<label for="userid" class="sr-only">아이디</label>
+		<input type="text" name="userid" class="form-control" placeholder="아이디" required autofocus>
+		<label for="userpwd" class="sr-only">비밀번호</label>
+		<input type="password" name="userpwd" class="form-control" placeholder="비밀번호" required>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+	</form>
+<script>
+$("button").click(function()
+	{
+		alert(1);
+	});
+$("#btn1").click(function()
+		{
+			alert(2);
+		});
+</script>
+</div>
 </body>
 </html>

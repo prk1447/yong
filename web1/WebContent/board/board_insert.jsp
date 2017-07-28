@@ -18,10 +18,8 @@ BoardInfo bi = new BoardInfo();
 String title = request.getParameter("bititle");
 String content = request.getParameter("bicontent");
 String pwd = request.getParameter("bipwd");
-
-bi.setBiTitle(title);
-bi.setBiContent(content);
-bi.setBiPwd(pwd);
+String creusr = request.getParameter("creusr");
+String tableName = request.getParameter("tableName");
 if(title != null && content != null && pwd != null)
 {
 	try
@@ -30,10 +28,10 @@ if(title != null && content != null && pwd != null)
 		String sql = "insert into board_info(bititle, bicontent, bipwd, creusr, credat)";
 		sql += " values(?,?,?,?,now())";
 		ps = con.prepareStatement(sql);
-		ps.setString(1, bi.getBiTitle());
-		ps.setString(2, bi.getBiContent());
-		ps.setString(3, bi.getBiPwd());
-		ps.setString(4, userId);
+		ps.setString(1, title);
+		ps.setString(2, content);
+		ps.setString(3, pwd);
+		ps.setString(4, creusr);
 		int result = ps.executeUpdate();
 		if(result == 1)
 		{
@@ -67,28 +65,33 @@ if(title != null && content != null && pwd != null)
 	}
 }
 %>
-<form action="<%=rootPath%>/board/board_insert.jsp">
-<table border="1">
-	<tr>
-		<td colspan="2"><p align="center"> = 게시글작성 = </p></td>
-	</tr>
-	<tr>
-		<td align="center">제목</td>
-		<td><input type="text" name="bititle"/></td>
-	</tr>
-	<tr>
-		<td align="center">내용</td>
-		<td><textarea name="bicontent"></textarea></td>
-	</tr>
-	<tr>
-		<td align="center">비밀번호</td>
-		<td><input type='password' name="bipwd"/></td>
-	</tr>
-	<tr>
-		<td align="center"><input type="submit" value ="작성하기"/></td>
-		<td align="center"><input type="button" value="게시판으로" onclick="doMain()"/></td>
-	</tr>
-</table>
-</form>
+<jsp:include page="/common/top.jsp" flush="false"></jsp:include>
+<div class="container">
+	<div class="starter-template">
+		<form action="<%=rootPath%>/board/board_insert.jsp">
+		<table border="1" class='table table-bordered table-hover'>
+			<tr align="center">
+				<td colspan="2"><p align="center"> = 게시글작성 = </p></td>
+			</tr>
+			<tr align="center">
+				<td align="center">제목</td>
+				<td><input type="text" name="bititle"/></td>
+			</tr>
+			<tr align="center">
+				<td align="center">내용</td>
+				<td><textarea name="bicontent"></textarea></td>
+			</tr>
+			<tr align="center">
+				<td align="center">비밀번호</td>
+				<td><input type='password' name="bipwd"/></td>
+			</tr>
+			<tr align="center">
+				<td colspan="2" align="center"><input type="submit" value ="작성하기"/>
+				<input type="button" value="게시판으로" onclick="doMain()"/></td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
 </body>
 </html>
