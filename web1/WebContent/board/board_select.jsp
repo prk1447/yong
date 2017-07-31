@@ -5,7 +5,7 @@
 <%@ page import="com.test.common.DBConn2" %>
 <%@ page import="com.test.dto.BoardInfo" %>
 <body>
-<jsp:include page="/common/top.jsp" flush="fasle">
+<jsp:include page="/common/top.jsp" flush="false">
 	<jsp:param value="<%=login%>" name="login"></jsp:param>
 </jsp:include>
 <script>
@@ -63,12 +63,14 @@ try
 	}
 	ResultSet rs = ps.executeQuery();
 	String tableStr = "<table class='table table-bordered table-hover'>";
+	tableStr += "<thead>";
 	tableStr += "<tr align='center'>";
 	tableStr += "<td>게시판번호</td>";
 	tableStr += "<td>제목</td>";
 	tableStr += "<td>작성자</td>";
 	tableStr += "<td>작성일자</td>";
 	tableStr += "</tr>";
+	tableStr += "</thead>";
 	boolean existData = false;
 	while(rs.next())
 	{

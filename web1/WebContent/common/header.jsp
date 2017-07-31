@@ -21,6 +21,7 @@ String hp1 =  "";
 String hp2 =  "";
 String hp3 =  "";
 
+String rootPath = request.getContextPath();
 boolean login = false;
 if(userId!=null){
 	userName =  (String) session.getAttribute("username");
@@ -31,7 +32,7 @@ if(userId!=null){
 	hp3 =  (String) session.getAttribute("hp3");
 	login = true;
 }
-String rootPath = request.getContextPath();
+String resultUrl = "";
 Date toDate = new Date();
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 String toDateStr = sdf.format(toDate); 
@@ -47,6 +48,7 @@ if(init==null && !login){
 <link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-theme.min.css"/>
 <link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="<%=rootPath%>/ui/common.css"/>
+<link rel="stylesheet" href="<%=rootPath%>/ui/board.css"/>
 <script>
 var rootPath = "<%=rootPath%>";
 

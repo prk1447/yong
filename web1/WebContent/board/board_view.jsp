@@ -85,7 +85,7 @@ finally
 			</tr>
 			<tr align="center">
 				<td>생성일자</td>
-				<td><%=creusr%></td>
+				<td><%=credat%></td>
 			</tr>
 			<tr align="center">
 				<td>비밀번호</td>
