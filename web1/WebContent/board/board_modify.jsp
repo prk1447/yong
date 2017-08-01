@@ -63,7 +63,6 @@ finally
 	DBConn2.closeCon();
 }
 %>
-<jsp:include page="/common/top.jsp" flush="false">
 	<jsp:param value="<%=login%>" name="login"></jsp:param>
 </jsp:include>
 <div class="container">

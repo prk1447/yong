@@ -5,9 +5,6 @@
 <%@ page import="com.test.dto.UserInfo" %>
 <link rel="stylesheet" href="<%=rootPath%>/ui/signin.css"/>
 <body>
-<jsp:include page="/common/top.jsp" flush="false">
-	<jsp:param value="<%=login%>" name="login"></jsp:param>
-</jsp:include>
 <div class="container">
 	<center><img src="https://ncache.ilbe.com/files/attach/new/20160807/377678/73009766/8553454912/91a0d2537595b1f86f1c79e153e34522.jpeg" style="width:304px;height:250px"/></center>
 	<form class="form-signin" action="<%=rootPath%>/user/login_ok.jsp">
@@ -43,7 +40,7 @@ $("button.btn").click(function()
 		{
 			alert(result.msg);
 			alert(result.login);
-			location.href="/main.jsp";
+			location.href="<%=rootPath%>/main.jsp";
 		}
 	,	error	: function(xhr, status, e)
 		{

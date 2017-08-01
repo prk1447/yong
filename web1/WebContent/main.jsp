@@ -3,9 +3,6 @@
     pageEncoding="UTF-8"%>
 <title>IOT_MAIN</title>
 <body>
-<jsp:include page="/common/top.jsp" flush="fasle">
-	<jsp:param value="<%=login%>" name="login"></jsp:param>
-</jsp:include>
     <div class="container">
       <div class="starter-template">
         <h1><%=userId%>님</h1>
