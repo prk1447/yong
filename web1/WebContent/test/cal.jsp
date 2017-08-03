@@ -1,105 +1,85 @@
+<%@ include file="/common/header.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<script src="/js/jquery-3.2.1.js"></script>
-<body>
+    
 <div class="container">
-<table border="1">
-<tr>
-<td><input type="text" id="num1" name="num1"/></td>
-	<td>
-	<select id="op" name="op">
-		<option value="선택">선택</option>
-		<option value="+">+</option>
-		<option value="-">-</option>
-		<option value="*">*</option>
-		<option value="/">/</option>
-	</select>
-	</td>
-<td><input type="text" id="num2" name="num2"/></td>
-<td><button type="button" id="btn2">계산하기</button></td>
-<td><input type="text" id="resultnum" name="resultnum"/></td>
-</tr>
-<tr align="center">
-	<td colspan="5">
-	<input type="text" id="searchId" name="searchId"/>
-	<button type="button" id="searchBtn">연산자 검색</button>
-</td>
-</tr>
-</table>
-</div>
+		<table id="table" data-height="460"
+			class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th data-field="calnum"  class="text-center">번호</th>
+					<th data-field="num1"  class="text-center">숫자1</th>
+					<th data-field="num2"  class="text-center">숫자2</th>
+					<th data-field="op"  class="text-center">연산자</th>
+					<th data-field="result"  class="text-center">결과값</th>
+				</tr>
+			</thead>
+			<tbody id="result_tbody">
+			</tbody>
+		</table>
+	</div>
+연산자 : <input type="text" id="op"/><input type="button" id="getCal" value="계산리스트호출"/>
+<div id="result_div" class="container"></div>
 <script>
-$("#btn2").click(function()
-{
-	var num1 = $("#num1").val();
-	var num2 = $("#num2").val();
+$("#getCal").click(function(){
 	var op = $("#op").val();
+	var param = {};
+	param["op"] = op;
+	param = JSON.stringify(param);
+	var a = { 
+	        type     : "POST"
+	    	    ,   url      : "/test/cal_select.jsp"
+	    	    ,   dataType : "json" 
+	    	    ,   beforeSend: function(xhr) {
+	    	        xhr.setRequestHeader("Accept", "application/json");
+	    	        xhr.setRequestHeader("Content-Type", "application/json");
+	    	    }
+	    	    ,   data     : param
+	    	    ,   success : function(result){
+		    	        $("#table").bootstrapTable({
+		    	            data: result
+		    	        });
+	    	    }
+	    	    ,   error : function(xhr, status, e) {
+	    		    	alert("에러 : "+e);
+	    		},
+	    		done : function(e) {
+	    		}
+	    		};
+	$.ajax(a);
+});
+
+$("input[id*='cal']").click(function(){
+	var id = this.id;
+	var idx = id.substring(id.length-1);
+	var num1 = $("#num"+ idx + "_1").val();
+	var num2 = $("#num"+ idx + "_2").val();
+
 	var param = {};
 	param["num1"] = num1;
 	param["num2"] = num2;
-	param["op"] = op;
+	param["op"] = ops[idx];
 	param = JSON.stringify(param);
-	$.ajax(
-	{
-		type	:	"POST"
-	,	url		:	"/test/cal_ok.jsp"
-	,	dataType	:	"json"
-	,	beforeSend	:	function(xhr)
-		{
-			xhr.setRequestHeader("Accept", "application/json");
-			xhr.setRequestHeader("Content-Type", "application/json");
-		}
-	,	data	:	param
-	,	success	:	function(result)
-		{
-			$("#resultnum").val(result.resultnum);
-		}
-	,	error	:	function(xhr, status, e)
-		{
-			alert("에러 : " + e);
-		}
-	,	done	:	function(e)
-		{
-			
-		}
-	});
-});
-
-$("#searchBtn").click(function()
-{
-	var searchId = $("#searchId").val();
-	var param = {};
-	param["searchId"] = searchId;
-	param = JSON.stringify(param);
-	$.ajax(
-			{
-				type	:	"POST"
-			,	url		:	"/test/cal_select.jsp"
-			,	dataType	:	"json"
-			,	beforeSend	:	function(xhr)
-				{
-					xhr.setRequestHeader("Accept", "application/json");
-					xhr.setRequestHeader("Content-Type", "application/json");
-				}
-			,	data	:	param
-			,	success	:	function(result)
-				{
-					result;
-				}
-			,	error	:	function(xhr, status, e)
-				{
-					alert("에러 : " + e);
-				}
-			,	done	:	function(e)
-				{
-					
-				}
-			});
+	var a = { 
+	        type     : "POST"
+	    	    ,   url      : "/test/cal_ok.jsp"
+	    	    ,   dataType : "json" 
+	    	    ,   beforeSend: function(xhr) {
+	    	        xhr.setRequestHeader("Accept", "application/json");
+	    	        xhr.setRequestHeader("Content-Type", "application/json");
+	    	    }
+	    	    ,   data     : param
+	    	    ,   success : function(result){ 
+	    	    	alert(result.insert);
+	    	    	$("#result" + idx).val(result.resultnum);  
+	    	    }
+	    	    ,   error : function(xhr, status, e) {
+	    		    	alert("에러 : "+e);
+	    		},
+	    		done : function(e) {
+	    		}
+	    		};
+	$.ajax(a);
 });
 </script>
 </body>
