@@ -10,7 +10,7 @@ import java.util.List;
 import com.test.common.DBConn;
 import com.test.common.DBConn2;
 import com.test.dto.Goods;
-import com.test.dto.UserInfo;
+import com.test.dto.Page;
 
 public class GoodsService 
 {
@@ -24,8 +24,12 @@ public class GoodsService
 			sql += " from goods_info as gi, vendor_info as vi";
 			sql += " where gi.vinum=vi.vinum";
 			sql += " order by gi.ginum";
+			sql += " limit ?,?";
+			Page page = pGoods.getPage();
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
+			ps.setInt(1, page.getStartRow());
+			ps.setInt(2, page.getRowCnt());
 			ResultSet rs = ps.executeQuery();
 			List<Goods> goodsList = new ArrayList<Goods>();
 			while(rs.next())
@@ -61,5 +65,46 @@ public class GoodsService
 			}
 		}
 		return null;
+	}
+	
+	public int getTotalCount(Goods pGoods)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try 
+		{
+			String sql = "select count(1) ";
+			sql += " from goods_info as gi, vendor_info as vi ";
+			sql += " where gi.vinum=vi.vinum";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			List<Goods> goodsList = new ArrayList<Goods>();
+			while(rs.next())
+			{
+				return rs.getInt(1);
+			}
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 }

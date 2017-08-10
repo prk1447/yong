@@ -39,7 +39,10 @@ $(document).ready(function()
 
 function callback(results)
 {
-	var goodsList = results
+	var goodsList = results.list;
+	var pageInfo = results.page;
+	setPagination(pageInfo, "page");
+	setEvent(pageInfo);
     $('#table').bootstrapTable('destroy');
     $('#table').bootstrapTable(
     {
@@ -47,10 +50,11 @@ function callback(results)
     });
 }
 
-function setEvent()
+function setEvent(pageInfo)
 {
 	$("ul[class='pagination']>li:not([class='disabled'])>a").click(function()
-	{
+	{	
+		var thisNowPage = pageInfo.nowPage;
 		var goPageNum = new Number(this.innerHTML);
 		if(isNaN(goPageNum))
 		{
@@ -60,31 +64,33 @@ function setEvent()
 			}
 			else if(this.innerHTML == "＜")
 			{
-				thisNowPage = Math.floor((thisNowPage - 1) / 10) * 10 - 9; 
+				thisNowPage = Math.floor((pageInfo.nowPage - 1) / 10) * 10 - 9; 
 			}
 			else if(this.innerHTML == "＞")
 			{
-				thisNowPage = Math.floor((thisNowPage - 1 ) / 10) * 10 + 11;
+				thisNowPage = Math.floor((pageInfo.nowPage - 1) / 10) * 10 + 11;
 			}
 			else if(this.innerHTML == "≫")
 			{
-				thisNowPage = thisTotalPage;
+				thisNowPage = pageInfo.totalPageCnt;
 			}
 			
 			if(thisNowPage <= 0)
 			{
 				thisNowPage = 1;
 			}
-			else if(thisNowPage > thisTotalPage)
+			else if(thisNowPage > pageInfo.thisTotalPage)
 			{
-				thisNowPage = thisTotalPage;
+				thisNowPage = pageInfo.totalPageCnt;
 			}
 			goPageNum = thisNowPage;
 		}
+		var page = {};
+		page["nowPage"] = "" + goPageNum;
 		var params = {};
-		params["nowPage"] = "" + goPageNum;
+		params["page"] = page;
 		params["command"] = "list";
-		goPage(params, "/test/vendor_info.jsp", callback);
+		goPage(params, "/list.goods", callback);
 	})
 }
 

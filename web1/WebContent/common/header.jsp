@@ -67,8 +67,12 @@ Number.prototype.equals = function(obj)
 	return this == obj;
 }
 
-function setPagination(sNum, eNum, nPage, nTotal, objId)
+function setPagination(pageInfo, objId)
 {
+	var sNum = pageInfo.startBlock;
+	var eNum = pageInfo.endBlock;
+	var nPage = pageInfo.nowPage
+	var nTotal = pageInfo.totalPageCnt;
 	var pageStr = "";
 	if(nPage == 1)
 	{
@@ -91,7 +95,7 @@ function setPagination(sNum, eNum, nPage, nTotal, objId)
 			pageStr += "<li><a>" + i + "</a></li>";
 		}
 	}
-	if(nPage == nTotal)
+	if(nPage.equals(nTotal))
 	{
 		pageStr += "<li class='disabled'><a>＞</a></li>";
 		pageStr += "<li class='disabled'><a>≫</a></li>";
