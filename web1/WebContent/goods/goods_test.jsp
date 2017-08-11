@@ -27,7 +27,7 @@ function callback(results)
 		alert(result.giDesc);
 	}
 }
-goPage([testParam,testParam2], "/test.goods", callback)
+movePageWithAjax([testParam,testParam2], "/test.goods", callback)
 </script>
 </body>
 </html>

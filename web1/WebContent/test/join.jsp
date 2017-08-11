@@ -35,7 +35,7 @@ $(document).ready(function()
 {
 	var params = {};
 	params["nowPage"] = "1";
-	goPage(params, "/test/vendor_info.jsp", callback);
+	movePageWithAjax(params, "/test/vendor_info.jsp", callback);
 });
 
 function callback(results)
@@ -57,7 +57,7 @@ function callback(results)
 		endBlock = totalPageCnt;
 	}
 	
-	setPagination(startBlock, endBlock, pageInfo.nowPage, totalPageCnt, "page");
+	makePagination(startBlock, endBlock, pageInfo.nowPage, totalPageCnt, "page");
 
 	for(var i=0, max=vendorList.length;i<max;i++)
 	{
@@ -107,7 +107,7 @@ function setEvent()
 		}
 		var params = {};
 		params["nowPage"] = "" + goPageNum;
-		goPage(params, "/test/vendor_info.jsp", callback);
+		movePageWithAjax(params, "/test/vendor_info.jsp", callback);
 	})
 }
 

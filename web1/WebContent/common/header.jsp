@@ -50,6 +50,7 @@ if(login)
 }
 %>
 <script src="<%=rootPath%>/js/jquery-3.2.1.js"></script>
+<script src="<%=rootPath%>/ui/common.js"></script>
 <script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap.min.js"></script>
 <script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap-table.js"></script>
 <link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-theme.min.css"/>
@@ -58,55 +59,8 @@ if(login)
 <link rel="stylesheet" href="<%=rootPath%>/ui/common.css"/>
 <link rel="stylesheet" href="<%=rootPath%>/ui/board.css"/>
 <script>
-Number.prototype.equals = function(obj)
-{
-	if(obj instanceof Number)
-	{
-		return this.toString() == obj.toString();
-	}
-	return this == obj;
-}
 
-function setPagination(pageInfo, objId)
-{
-	var sNum = pageInfo.startBlock;
-	var eNum = pageInfo.endBlock;
-	var nPage = pageInfo.nowPage
-	var nTotal = pageInfo.totalPageCnt;
-	var pageStr = "";
-	if(nPage == 1)
-	{
-		pageStr += "<li class='disabled'><a>≪</a></li>";
-		pageStr += "<li class='disabled'><a>＜</a></li>";
-	}
-	else
-	{
-		pageStr += "<li><a>≪</a></li>";
-		pageStr += "<li><a>＜</a></li>";
-	}
-	for(var i=sNum, max=eNum;i<=max;i++)
-	{
-		if(i==nPage)
-		{
-			pageStr += "<li class='active'><a>" + i + "</a></li>";
-		}
-		else
-		{
-			pageStr += "<li><a>" + i + "</a></li>";
-		}
-	}
-	if(nPage.equals(nTotal))
-	{
-		pageStr += "<li class='disabled'><a>＞</a></li>";
-		pageStr += "<li class='disabled'><a>≫</a></li>";
-	}
-	else
-	{
-		pageStr += "<li><a>＞</a></li>";
-		pageStr += "<li><a>≫</a></li>";
-	}
-	$("#" + objId).html(pageStr);
-}
+
 
 var rootPath = "<%=rootPath%>";
 $(document).ready(function()
@@ -127,30 +81,6 @@ function doMovePage(pageId){
 	location.href=url;
 }
 
-function goPage(pParams, pUrl, pCallBackFunc)
-{
-	var params = JSON.stringify(pParams);
-	$.ajax(
-	{
-		type	:	"POST"
-	,	url		:	pUrl
-	,	dataType	:	"json"
-	,	beforeSend	:	function(xhr)
-		{
-			xhr.setRequestHeader("Accept", "application/json");
-			xhr.setRequestHeader("Content-Type", "application/json");
-		}
-	,	data	:	params
-	,	success	:	pCallBackFunc
-	,	error	:	function(xhr, status, e)
-		{
-			alert("에러 : " + e);
-		}
-	,	complete	:	function()
-		{
-		}
-	});
-}
 </script>
 <body background="http://st.gde-fon.com/wallpapers_original/415423_skajp_oblaka_raduga_prostoj-fon_1680x1050_www.Gde-Fon.com.jpg"></body>
 <nav class="navbar navbar-inverse navbar-fixed-top">

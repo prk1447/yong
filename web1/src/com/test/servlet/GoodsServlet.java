@@ -41,9 +41,11 @@ public class GoodsServlet extends HttpServlet{
 			Page page = goods.getPage();
 			page.setTotalCnt(totalCnt);
 			List<Goods> list = gs.selectGoods(goods);
+			List vendorList = gs.selectVendor(goods);
 			HashMap resultMap = new HashMap();
 			resultMap.put("page", page);
 			resultMap.put("list", list);
+			resultMap.put("vendor", vendorList);
 			String jsonStr = g.toJson(resultMap);
 			doProcess(response, jsonStr);
 		}
