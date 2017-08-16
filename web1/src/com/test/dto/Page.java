@@ -28,7 +28,7 @@ public class Page {
 		totalPageCnt = (totalCnt / rowCnt) + 1;
 		startRow = (nowPage - 1) * rowCnt;
 		startBlock = ((nowPage - 1)/blockCnt) * blockCnt + 1;
-		endBlock = getStartBlock() + blockCnt-1;
+		endBlock = startBlock + blockCnt-1;
 		if(endBlock>totalPageCnt)
 		{
 			endBlock = totalPageCnt;

@@ -23,7 +23,8 @@ String hp3 =  "";
 
 String rootPath = request.getContextPath();
 boolean login = false;
-if(userId!=null){
+if(userId!=null)
+{
 	userName =  (String) session.getAttribute("username");
 	age =  (int) session.getAttribute("age");
 	address =  (String) session.getAttribute("address");
@@ -38,7 +39,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 String toDateStr = sdf.format(toDate); 
 String init = request.getParameter("init");
 String defaultUrl = "";
-if(init==null && !login){
+if(init==null && !login)
+{
 	defaultUrl = rootPath + "/user/login.jsp?init=2";
 	response.sendRedirect(defaultUrl);
 }
@@ -48,18 +50,18 @@ if(login)
 {
 	loginStr = "로그아웃";
 }
+String version = "1.3.2";
 %>
-<script src="<%=rootPath%>/js/jquery-3.2.1.js"></script>
-<script src="<%=rootPath%>/ui/common.js"></script>
-<script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap.min.js"></script>
-<script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap-table.js"></script>
-<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-theme.min.css"/>
-<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-table.css"/>
-<link rel="stylesheet" href="<%=rootPath%>/ui/common.css"/>
-<link rel="stylesheet" href="<%=rootPath%>/ui/board.css"/>
+<script src="<%=rootPath%>/js/jquery-3.2.1.js?version=<%=version%>"></script>
+<script src="<%=rootPath%>/ui/common.js?version=<%=version%>"></script>
+<script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap.min.js?version=<%=version%>"></script>
+<script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap-table.js?version=<%=version%>"></script>
+<script src="<%=rootPath%>/ui/btsp3.7.7/js/bootstrap-table.js?version=<%=version%>"></script>
+<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-theme.min.css?version=<%=version%>"/>
+<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap.min.css?version=<%=version%>"/>
+<link rel="stylesheet" href="<%=rootPath%>/ui/btsp3.7.7/css/bootstrap-table.css?version=<%=version%>"/>
+<link rel="stylesheet" href="<%=rootPath%>/ui/common.css?version=<%=version%>"/>
 <script>
-
 
 
 var rootPath = "<%=rootPath%>";

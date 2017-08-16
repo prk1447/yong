@@ -5,17 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.test.common.DBConn;
 import com.test.common.DBConn2;
 import com.test.dto.Goods;
 import com.test.dto.Page;
+import com.test.dto.Vendor;
 
 public class GoodsService 
 {
-	public List<Goods> selectGoods(Goods pGoods)
+	public List<Goods> selectGoodsList(Goods pGoods)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -24,23 +24,47 @@ public class GoodsService
 			String sql = "select gi.ginum, gi.giname, gi.gidesc, vi.vinum, vi.viname";
 			sql += " from goods_info as gi, vendor_info as vi";
 			sql += " where gi.vinum=vi.vinum";
+			int idx = 0;
+			if(pGoods.getViNum() != 0)
+			{
+				sql += " and gi.vinum=?";
+				idx++;
+			}
+			if(pGoods.getGiName() != null)
+			{
+				sql += " and gi.giname like ?";
+				idx++;
+			}
 			sql += " order by gi.ginum";
 			sql += " limit ?,?";
 			Page page = pGoods.getPage();
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, page.getStartRow());
-			ps.setInt(2, page.getRowCnt());
+			if(pGoods.getViNum() != 0 && pGoods.getGiName() == null)
+			{
+				ps.setInt(1, pGoods.getViNum());
+			}
+			else if(pGoods.getGiName() != null && pGoods.getViNum() == 0)
+			{
+				ps.setString(1, "%" + pGoods.getGiName() + "%");
+			}
+			else if(pGoods.getGiName() != null && pGoods.getViNum() != 0)
+			{
+				ps.setInt(1, pGoods.getViNum());
+				ps.setString(2, "%" + pGoods.getGiName() + "%");
+			}
+			ps.setInt(++idx, page.getStartRow());
+			ps.setInt(++idx, page.getRowCnt());
 			ResultSet rs = ps.executeQuery();
 			List<Goods> goodsList = new ArrayList<Goods>();
 			while(rs.next())
 			{
 				Goods goods = new Goods();
-				goods.setGiNum(rs.getInt("gi.ginum"));
-				goods.setGiName(rs.getString("gi.giname"));
-				goods.setGiDesc(rs.getString("gi.gidesc"));
-				goods.setViNum(rs.getInt("vi.vinum"));
-				goods.setViName(rs.getString("vi.viname"));
+				goods.setGiNum(rs.getInt("ginum"));
+				goods.setGiName(rs.getString("giname"));
+				goods.setGiDesc(rs.getString("gidesc"));
+				goods.setViNum(rs.getInt("vinum"));
+				goods.setViName(rs.getString("viname"));
 				goodsList.add(goods);
 			}
 			return goodsList;
@@ -75,12 +99,32 @@ public class GoodsService
 		try 
 		{
 			String sql = "select count(1) ";
-			sql += " from goods_info as gi, vendor_info as vi ";
+			sql += " from goods_info as gi, vendor_info as vi";
 			sql += " where gi.vinum=vi.vinum";
+			if(pGoods.getViNum() != 0)
+			{
+				sql += " and gi.vinum=?";
+			}
+			if(pGoods.getGiName() != null)
+			{
+				sql += " and gi.giname like ?";
+			}
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
+			if(pGoods.getViNum() != 0 && pGoods.getGiName() == null)
+			{
+				ps.setInt(1, pGoods.getViNum());
+			}
+			else if(pGoods.getGiName() != null && pGoods.getViNum() == 0)
+			{
+				ps.setString(1, "%" + pGoods.getGiName() + "%");
+			}
+			else if(pGoods.getGiName() != null && pGoods.getViNum() != 0 )
+			{
+				ps.setInt(1, pGoods.getViNum());
+				ps.setString(2, "%" + pGoods.getGiName() + "%");
+			}
 			ResultSet rs = ps.executeQuery();
-			List<Goods> goodsList = new ArrayList<Goods>();
 			while(rs.next())
 			{
 				return rs.getInt(1);
@@ -109,25 +153,72 @@ public class GoodsService
 		return 0;
 	}
 	
-	public List selectVendor(Goods pGoods)
+	public List<Vendor> selectVendorsList()
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
-		ArrayList<Map<String, String>> vendorList = new ArrayList<Map<String, String>>();
+		try {
+			String sql = "select vinum, viname from vendor_info";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			List<Vendor> vendorList = new ArrayList<Vendor>();
+			while(rs.next())
+			{
+				Vendor vendor = new Vendor();
+				vendor.setViNum(rs.getInt("vinum"));
+				vendor.setViName(rs.getString("viname"));
+				vendorList.add(vendor);
+			}
+			return vendorList;
+		}
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public Goods selectGoods(Goods pGoods)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
 		try
 		{
+			String sql = "select gi.ginum, gi.giname, gi.gidesc, vi.vinum, vi.viname";
+			sql += " from goods_info as gi, vendor_info as vi";
+			sql += " where gi.vinum=vi.vinum";
+			sql += " and gi.ginum=?";
 			con = DBConn2.getCon();
-			String sql = "select vinum, viname from vendor_info";
 			ps = con.prepareStatement(sql);
+			ps.setInt(1, pGoods.getGiNum());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
-				Map<String, String> vhm = new HashMap<String, String>();
-				vhm.put("vinum", rs.getString("vinum"));
-				vhm.put("viname", rs.getString("viname"));
-				vendorList.add(vhm);
+				Goods goods = new Goods();
+				goods.setGiNum(rs.getInt("ginum"));
+				goods.setGiName(rs.getString("giname"));
+				goods.setGiDesc(rs.getString("gidesc"));
+				goods.setViNum(rs.getInt("vinum"));
+				goods.setViName(rs.getString("viname"));
+				return goods;
 			}
-		return vendorList;
 		}
 		catch(ClassNotFoundException e)
 		{
@@ -144,11 +235,132 @@ public class GoodsService
 				ps.close();
 				DBConn2.closeCon();
 			} 
-			catch (SQLException e) 
+			catch (SQLException e)
 			{
 				e.printStackTrace();
 			}
 		}
 		return null;
+	}
+
+	public int deleteGoods(Goods pGoods)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "delete from goods_info where ginum=?";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, pGoods.getGiNum());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+	public int insertGoods(Goods pGoods)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "insert into goods_info(giname, gidesc, vinum, gicredat, gicretim)";
+			sql += " values(?,?,?,DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s'))";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, pGoods.getGiName());
+			ps.setString(2, pGoods.getGiDesc());
+			ps.setInt(3, pGoods.getViNum());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+	public int updateGoods(Goods pGoods)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "update goods_info";
+			sql += " set giname=?,";
+			sql += " gidesc=?,";
+			sql += " vinum=?";
+			sql += " where ginum=?";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, pGoods.getGiName());
+			ps.setString(2, pGoods.getGiDesc());
+			ps.setInt(3, pGoods.getViNum());
+			ps.setInt(4, pGoods.getGiNum());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 }
