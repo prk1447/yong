@@ -3,8 +3,8 @@
 <%@ include file="/common/header.jsp"%>
 <div class="container">
 	<div class="container" style="text-align: center; padding-top: 20px;padding-bottom: 20px;"> 
-		<label>회사이름 : </label> <input type="text" id="giName" /> 
-		<input type="button" id="searchGoods" value="검색" />
+		<label>회사이름 : </label> <input type="text" id="viName" /> 
+		<input type="button" id="searchVendor" value="검색" />
 	</div>
 	<table id="table" data-height="460"
 		class="table table-bordered table-hover">
@@ -29,76 +29,69 @@
 <script>
 $("#btnInsert").click(function()
 {
-	location.href="/goods/goods_insert.jsp";	
+	location.href="/vendor/vendor_insert.jsp";	
 })
 
-$("#searchGoods").click(function()
+$("#searchVendor").click(function()
 {
 	var viName = $("#viName").val().trim();
 	if(viName == "")
 	{
-		alert("회사 선택이나 제품명을 입력해주세요");
+		alert("회사이름을 똑바로 입력해주세여");
 		return;
 	}
 	var params = {};
+	if(viName != "")
+	{
+		params["viName"] = viName;
+	}
 	params["command"] = "list";
-	params["viName"] = viName;
-	movePageWithAjax(params, "/list.goods", callback);
-})
+	movePageWithAjax(params, "/list.vendor", callback);
+});
 
 function callback(results)
 {
-	var goodsList = results.list;
-	pageInfo = results.page;
 	var vendorList = results.vendor;
-	var search = results.search;
-	var selStr = "<option value=''>회사선택</option>";
+	$('#table').bootstrapTable('destroy');
+	var resultStr = "";
 	for(var i = 0, max = vendorList.length; i < max; i++)
 	{
 		var vendor = vendorList[i];
-		var selectStr = "";
-		if(search.viNum == vendor.viNum)
-		{
-			selectStr = "selected";
-		}
-		selStr += "<option value='" + vendor.viNum + "'" + selectStr + ">" + vendor.viName	+ "</option>";
-	}
-	$("#v_vendor").html(selStr);
-	var params = {};
-	if(search.viNum != 0)
-	{
-		params["viNum"] = search.viNum;
-	}
-	if(search.giName)
-	{
-		params["giName"] = search.giName;
-	}
-	makePagination(pageInfo,"page");
-	setEvent(pageInfo,params , "/list.goods");
-	$('#table').bootstrapTable('destroy');
-	var resultStr = "";
-	for(var i=0, max=goodsList.length;i<max;i++)
-	{
-		var goods = goodsList[i];
-		resultStr += "<tr data-view='" + goods.giNum + "'>";
-		resultStr +="<td class='text-center'>" + goods.giNum + "</td>";
-		resultStr +="<td class='text-center'>" + goods.giName + "</td>";
-		resultStr +="<td class='text-center'>" + goods.giDesc + "</td>";
-		resultStr +="<td class='text-center'>" + goods.viNum + "</td>";
-		resultStr +="<td class='text-center'>" + goods.viName + "</td>";
-		resultStr +="</tr>";
+		resultStr += "<tr data-view='" + vendor.viNum + "'>";
+		resultStr += "<td class='text-center'>" + vendor.viNum + "</td>";
+		resultStr += "<td class='text-center'>" + vendor.viName + "</td>";
+		resultStr += "<td class='text-center'>" + vendor.viDesc + "</td>";
+		resultStr += "<td class='text-center'>" + vendor.viAddress + "</td>";
+		resultStr += "<td class='text-center'>" + vendor.viPhone + "</td>";
+		resultStr += "</tr>";
 	}
 	$('#result_tbody').html(resultStr);
 	$("tbody[id='result_tbody']>tr[data-view]").click(function()
 	{
 		var params = {};
-		params["giNum"] = this.getAttribute("data-view");
+		params["viNum"] = this.getAttribute("data-view");
 		params["command"] = "view";
-		var page = {};
-		page["nowPage"] = pageInfo.nowPage;
-		params["page"] = page;
-		movePageWithAjax(params, "/list.goods", callBackView);
+		movePageWithAjax(params, "/list.vendor", callBackView);
 	});
+}
+
+$(document).ready(function()
+{
+	var params = {};
+	params["command"] = "list";
+	movePageWithAjax(params, "/list.vendor", callback);
+});
+
+
+function callBackView(result)
+{
+	var url = result.url;
+	url += "?viNum=" + result.vendor.viNum;
+	url += "&viName=" + result.vendor.viName;
+	url += "&viDesc=" + result.vendor.viDesc;
+	url += "&viAddress=" + result.vendor.viAddress;
+	url += "&viPhone=" + result.vendor.viPhone;
+	location.href = url;
 }
 </script>
 </body>

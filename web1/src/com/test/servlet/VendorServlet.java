@@ -15,32 +15,62 @@ import com.google.gson.Gson;
 import com.test.dto.Goods;
 import com.test.dto.Page;
 import com.test.dto.Vendor;
-import com.test.service.GoodsService;
+import com.test.service.VendorService;
 
 public class VendorServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
-	private GoodsService gs = new GoodsService();
+	private VendorService vs = new VendorService();
 	Gson g = new Gson();
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
 	{
 		request.setCharacterEncoding("UTF-8");
+		
+		String params = request.getParameter("param");
+	    Vendor vendor = g.fromJson(params, Vendor.class);
+	    String command = vendor.getCommand();
+		if(command.equals("view"))
+		{
+	    	Vendor resultVendor = vs.selectVendor(vendor);
+	    	request.setAttribute("vendor", resultVendor);
+	    	request.setAttribute("url", "/goods/goods_view.jsp");
+	    	RequestDispatcher rd=request.getRequestDispatcher("/goods/goods_view2.jsp");
+	    	try 
+	    	{
+				rd.forward(request, response);
+			} 
+	    	catch (ServletException e)
+	    	{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 		request.setCharacterEncoding("UTF-8");
 		
-		Goods goods = g.fromJson(request.getReader(), Goods.class);
-		String command = goods.getCommand();
-		Page page = goods.getPage();
+		Vendor vendor = g.fromJson(request.getReader(), Vendor.class);
+		String command = vendor.getCommand();
 		if(command.equals("list"))
 		{
+			List<Vendor> vendorList = vs.selectVendorsList(vendor);
+			HashMap hm = new HashMap();
+			hm.put("vendor", vendorList);
+			String result = g.toJson(hm);
+			doProcess(response, result);
 		}
 		else if(command.equals("view"))
 		{   	
+			Vendor resultVendor = vs.selectVendor(vendor);
+			HashMap hm = new HashMap();
+			hm.put("vendor", resultVendor);
+			hm.put("url", "/vendor/vendor_view.jsp");
+			String jsonStr = g.toJson(hm);
+			doProcess(response, jsonStr);
 	    }
 		else if(command.equals("delete"))
 		{
@@ -50,6 +80,17 @@ public class VendorServlet extends HttpServlet{
 		}
 		else if(command.equals("insert"))
 		{
+			int result = vs.insertVendor(vendor);
+			HashMap hm = new HashMap();
+			hm.put("msg", "저장 성공");
+			hm.put("url", "/vendor/vendor_list.jsp");
+			if(result != 1)
+			{
+				hm.put("msg", "저장 실패");
+				hm.put("url", "");
+			}
+			String jsonStr = g.toJson(hm);
+			doProcess(response, jsonStr);
 		}
 		else if(command.equals("update"))
 		{

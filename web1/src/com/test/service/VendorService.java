@@ -8,42 +8,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.test.common.DBConn2;
-import com.test.dto.Goods;
-import com.test.dto.Page;
+import com.test.dto.Vendor;
 
 public class VendorService {
 
-	public List<Goods> selectGoodsList(Goods pGoods)
+	public List<Vendor> selectVendorsList(Vendor vendor)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try 
 		{
-			String sql = "select gi.ginum, gi.giname, gi.gidesc, vi.vinum, vi.viname "
-					+ " from goods_info as gi, vendor_info as vi "
-					+ " where gi.vinum=vi.vinum"
-					+ " order by gi.ginum"
-					+ " limit ?,?";
-			Page page = pGoods.getPage();
+			String sql = "select vinum, viname, videsc, viaddress, viphone from vendor_info where 1=1";
+			if(vendor.getViName() != null)
+			{
+				sql += " and viname like ?";
+			}
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, page.getStartRow());
-			System.out.println(page.getStartRow());
-			ps.setInt(2, page.getRowCnt());
-			System.out.println(page.getBlockCnt());
+			if(vendor.getViName() != null)
+			{
+				ps.setString(1, "%" + vendor.getViName() + "%");
+			}
 			ResultSet rs = ps.executeQuery();
-			List<Goods> goodsList = new ArrayList<Goods>();
+			List<Vendor> vendorList = new ArrayList<Vendor>();
 			while(rs.next())
 			{
-				Goods goods = new Goods();
-				goods.setGiNum(rs.getInt("ginum"));
-				goods.setGiName(rs.getString("giname"));
-				goods.setGiDesc(rs.getString("gidesc"));
-				goods.setViNum(rs.getInt("vinum"));
-				goods.setViName(rs.getString("viname"));
-				goodsList.add(goods);
+				Vendor rVendor = new Vendor();
+				rVendor.setViNum(rs.getInt("vinum"));
+				rVendor.setViName(rs.getString("viname"));
+				rVendor.setViDesc(rs.getString("videsc"));
+				rVendor.setViAddress(rs.getString("viaddress"));
+				rVendor.setViPhone(rs.getString("viphone"));
+				vendorList.add(rVendor);
 			}
-			return goodsList;
+			return vendorList;
 		}
 		catch (ClassNotFoundException e) 
 		{
@@ -68,44 +66,91 @@ public class VendorService {
 		return null;
 	}
 
-	public int getTotalCount(Goods pGoods)
+	public int insertVendor(Vendor vendor)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
-		try 
+		try
 		{
-			String sql = "select count(1) "
-					+ " from goods_info as gi, vendor_info as vi "
-					+ " where gi.vinum=vi.vinum";
+			String sql = "insert into vendor_info(vinum, viname, videsc, viaddress, viphone, vicredat, vicretim)";
+			sql += " values(?,?,?,?,?,DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s'))";
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			List<Goods> goodsList = new ArrayList<Goods>();
-			while(rs.next())
-			{
-				return rs.getInt(1);
-			}
+			ps.setInt(1, vendor.getViNum());
+			ps.setString(2, vendor.getViName());
+			ps.setString(3, vendor.getViDesc());
+			ps.setString(4, vendor.getViAddress());
+			ps.setString(5, vendor.getViPhone());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
 		}
-		catch (ClassNotFoundException e)
+		catch(ClassNotFoundException e)
 		{
 			e.printStackTrace();
 		}
-		catch (SQLException e)
+		catch(SQLException e)
 		{
 			e.printStackTrace();
 		}
 		finally
 		{
-			try
+			try 
 			{
 				ps.close();
 				DBConn2.closeCon();
-			}
-			catch (SQLException e) 
+			} 
+			catch (SQLException e)
 			{
 				e.printStackTrace();
 			}
 		}
 		return 0;
+	}
+
+	public Vendor selectVendor(Vendor vendor)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "select vinum, viname, videsc, viaddress, viphone from vendor_info where 1=1";
+			sql += " and vinum=?";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, vendor.getViNum());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				Vendor rVendor = new Vendor();
+				rVendor.setViNum(rs.getInt("viNum"));
+				rVendor.setViName(rs.getString("viName"));
+				rVendor.setViDesc(rs.getString("viDesc"));
+				rVendor.setViAddress(rs.getString("viAddress"));
+				rVendor.setViPhone(rs.getString("viPhone"));
+				return rVendor;
+			}
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }
