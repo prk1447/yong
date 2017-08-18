@@ -5,7 +5,7 @@
 		<table id="table"  data-height="460"	class="table table-bordered table-hover">
 		<thead> 
 			<tr> 
-				<th colspan="2" class="text-center"><h5 class="form-signin-heading">회사 등록 페이지</h5></th>
+				<th colspan="2" class="text-center"><h5 class="form-signin-heading">회사 수정 페이지</h5></th>
 			</tr>
 			<tr>
 				<td>회사 이름</td>
@@ -25,37 +25,59 @@
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<button id="btnInsert" class="btn btn-primary" 	type="button">회사 등록</button>
+					<button id="btnUpdate" class="btn btn-primary" 	type="button">회사 수정</button>
 					<button id="goList" class="btn" 	type="button">취소</button>
 				</td>
 			</tr>
 		</table>
 	</div>
-	<!-- /container -->
+<!-- /container -->
 <script>
-$("#btnInsert").click(function()
+$("#btnUpdate").click(function()
 {
 	var params = {};
-	params["command"] = "insert";
+	params["command"] = "update";
 	params["viName"] = $("#viName").val();
 	params["viDesc"] = $("#viDesc").val();
 	params["viAddress"] = $("#viAddress").val();
 	params["viPhone"] = $("#viPhone").val();
-	movePageWithAjax(params, "/insert.vendor", callbackInsert);
-});
+	params["viNum"] = "<%=request.getParameter("viNum")%>";
+	movePageWithAjax(params, "/update.vendor", callbackUpdate);
+})
 
+$(document).ready(function()
+{
+	var params = {};
+	params["command"] = "vendor";
+	movePageWithAjax(params, "/update.vendor", callback);
+})
 
-function callbackInsert(results)
+function callback(results)
+{
+	var params = {};
+	params["command"] = "view";
+	params["viNum"] = "<%=request.getParameter("viNum")%>";
+	movePageWithAjax(params, "/update.vendor", callback2);
+}
+
+function callback2(results)
+{
+	$("#viName").val(results.vendor.viName);
+	$("#viDesc").val(results.vendor.viDesc);
+	$("#viAddress").val(results.vendor.viAddress);
+	$("#viPhone").val(results.vendor.viPhone);
+}
+
+function callbackUpdate(results)
 {
 	alert(results.msg);
 	location.href = results.url;
 }
 
-
 $("#goList").click(function()
 {
-	location.href = "/vendor/vendor_list.jsp";	
-})
+	location.href="/vendor/vendor_list.jsp";
+});
 </script>
 </body>
 </html>

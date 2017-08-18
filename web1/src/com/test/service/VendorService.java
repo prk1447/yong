@@ -72,15 +72,14 @@ public class VendorService {
 		PreparedStatement ps = null;
 		try
 		{
-			String sql = "insert into vendor_info(vinum, viname, videsc, viaddress, viphone, vicredat, vicretim)";
-			sql += " values(?,?,?,?,?,DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s'))";
+			String sql = "insert into vendor_info(viname, videsc, viaddress, viphone, vicredat, vicretim)";
+			sql += " values(?,?,?,?,DATE_FORMAT(NOW(), '%Y%m%d'), DATE_FORMAT(NOW(), '%H%i%s'))";
 			con = DBConn2.getCon();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, vendor.getViNum());
-			ps.setString(2, vendor.getViName());
-			ps.setString(3, vendor.getViDesc());
-			ps.setString(4, vendor.getViAddress());
-			ps.setString(5, vendor.getViPhone());
+			ps.setString(1, vendor.getViName());
+			ps.setString(2, vendor.getViDesc());
+			ps.setString(3, vendor.getViAddress());
+			ps.setString(4, vendor.getViPhone());
 			int result = ps.executeUpdate();
 			con.commit();
 			return result;
@@ -152,5 +151,84 @@ public class VendorService {
 			}
 		}
 		return null;
+	}
+
+	public int deleteVendor(Vendor vendor)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "delete from vendor_info where vinum=?";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, vendor.getViNum());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+	public int updateVendor(Vendor vendor)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try
+		{
+			String sql = "update vendor_info set viname=?,";
+			sql += "videsc=?,viaddress=?,viphone=? where vinum=?";
+			con = DBConn2.getCon();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, vendor.getViName());
+			ps.setString(2, vendor.getViDesc());
+			ps.setString(3, vendor.getViAddress());
+			ps.setString(4, vendor.getViPhone());
+			ps.setInt(5, vendor.getViNum());
+			int result = ps.executeUpdate();
+			con.commit();
+			return result;
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				ps.close();
+				DBConn2.closeCon();
+			} 
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 }

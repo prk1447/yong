@@ -74,9 +74,17 @@ public class VendorServlet extends HttpServlet{
 	    }
 		else if(command.equals("delete"))
 		{
-		}
-		else if(command.equals("vendorlist"))
-		{
+			int result = vs.deleteVendor(vendor);
+			HashMap hm = new HashMap();
+			hm.put("msg", "삭제 성공");
+			hm.put("url", "/vendor/vendor_list.jsp");
+			if(result != 1)
+			{
+				hm.put("msg", "삭제 실패");
+				hm.put("url", "");
+			}
+			String jsonStr = g.toJson(hm);
+			doProcess(response, jsonStr);
 		}
 		else if(command.equals("insert"))
 		{
@@ -94,6 +102,25 @@ public class VendorServlet extends HttpServlet{
 		}
 		else if(command.equals("update"))
 		{
+			int result = vs.updateVendor(vendor);
+			HashMap hm = new HashMap();
+			hm.put("msg", "수정 완료");
+			hm.put("url", "/vendor/vendor_list.jsp");
+			if(result != 1)
+			{
+				hm.put("msg", "수정 실패");
+				hm.put("url", "");
+			}
+			String jsonStr = g.toJson(hm);
+			doProcess(response, jsonStr);
+		}
+		else if(command.equals("vendor"))
+		{
+			Vendor vendorList = vs.selectVendor(vendor);
+			HashMap hm = new HashMap();
+			hm.put("vendor", vendorList);
+			String jsonStr = g.toJson(hm);
+			doProcess(response, jsonStr);
 		}
 	}
 

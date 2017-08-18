@@ -42,14 +42,14 @@
 	</div>
 	<!-- /container -->
 <script>
-$("btnUpdate").click(function()
+$("#btnUpdate").click(function()
 {
-	location.href = "/vendor/vendor_update.jsp&viNum=" + <%=request.getParameter("viNum")%>;
+	location.href = "/vendor/vendor_update.jsp?viNum=" + <%=request.getParameter("viNum")%>;
 });
 
-$("btnDelete").click(function()
+$("#btnDelete").click(function()
 {
-	var isDelete = confrim("해당 회사를 삭제하시겠습니까?");
+	var isDelete = confirm("해당 회사를 삭제하시겠습니까?");
 	
 	if(isDelete)
 	{
@@ -62,11 +62,10 @@ $("btnDelete").click(function()
 
 function callbackView(results)
 {
-	alert(result.msg);
-	if(result.url != "")
+	alert(results.msg);
+	if(results.url != "")
 	{
-		alert(result.url);
-		location.href = result.url;
+		location.href = results.url;
 	}
 }
 $("#btnGoList").click(function()
