@@ -47,13 +47,22 @@
     <servlet-name>GoodsServlet</servlet-name>
     <url-pattern>*.goods</url-pattern>
   </servlet-mapping>
-    <servlet>
+  <servlet>
     <servlet-name>VendorServlet</servlet-name>
     <servlet-class>com.test.servlet.VendorServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>VendorServlet</servlet-name>
     <url-pattern>*.vendor</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>FormTest</servlet-name>
+    <servlet-class>com.test.servlet.test.FormServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FormTest</servlet-name>
+    <url-pattern>*.formtest</url-pattern>
   </servlet-mapping>
   
   <filter>
