@@ -15,13 +15,13 @@ import com.google.gson.Gson;
 import com.test.dto.Goods;
 import com.test.dto.Page;
 import com.test.dto.Vendor;
-import com.test.service.VendorService;
+import com.test.service.implement.VendorServiceImpl;
 
 public class VendorServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
-	private VendorService vs = new VendorService();
+	private VendorServiceImpl vs = new VendorServiceImpl();
 	Gson g = new Gson();
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException

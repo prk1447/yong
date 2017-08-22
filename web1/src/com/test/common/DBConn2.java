@@ -21,6 +21,11 @@ public class DBConn2 {
 		}
 	}
 	
+	public static Properties getPro()
+	{
+		return pro;
+	}
+	
 	private static Connection con;
 	public static Connection getCon() throws ClassNotFoundException, SQLException
 	{

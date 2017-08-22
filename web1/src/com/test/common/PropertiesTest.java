@@ -7,7 +7,7 @@ public class PropertiesTest
 {
 	Properties pro = new Properties();
 	
-	public static void main(String args)
+	public static void main(String[] args)
 	{
 		PropertiesTest pt = new PropertiesTest();
 		try
